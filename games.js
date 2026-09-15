@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
         var publisherJogo = document.getElementById("publisher_jogo").value;
         var generoJogo = document.getElementById("genero_jogo").value;
         var plataformaJogo = document.getElementById("plataforma_jogo").value;
+        // var anoPubli = document.getElementById("ano_publi").value;
 
         console.log(`📥 [INPUTS CAPTURADOS]:
         - Nome: "${nomeJogo}"
@@ -57,7 +58,8 @@ document.addEventListener("DOMContentLoaded", () => {
             nomeJogo: nomeJogo,
             publisherJogo: publisherJogo,
             generoJogo: generoJogo,
-            plataformaJogo: plataformaJogo
+            plataformaJogo: plataformaJogo,
+            // anoPubli: anoPubli
         };
 
         console.log("➕ [NOVO JOGO] Objeto formatado para salvamento:", novoJogo);
@@ -105,6 +107,7 @@ function carregaRegistros(){
                             <th>Publisher</th>
                             <th>Gênero</th>
                             <th>Plataforma</th>
+
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -121,6 +124,7 @@ function carregaRegistros(){
                             <td>${item.publisherJogo}</td>
                             <td><span class="badge bg-secondary">${item.generoJogo}</span></td>
                             <td>${item.plataformaJogo}</td>
+    
                             <td>
                                 <a href='games.html?id=${index}&acao=alterar' class="btn btn-outline-primary btn-sm me-1">
                                     <i class="fa-solid fa-pen"></i> Editar
@@ -167,6 +171,7 @@ function executaAcao(acao, indice, url){
         document.getElementById("publisher_jogo").value = obj.publisherJogo;
         document.getElementById("genero_jogo").value = obj.generoJogo || "";
         document.getElementById("plataforma_jogo").value = obj.plataformaJogo || "";
+        // document.getElementById("ano_publi").value = obj.anoPubli || "";
 
         // Insere o botão Salvar na tela
         document.getElementById("cadastro").disabled = true;
@@ -180,6 +185,7 @@ function executaAcao(acao, indice, url){
             jogos[indice].publisherJogo = document.getElementById("publisher_jogo").value;
             jogos[indice].generoJogo = document.getElementById("genero_jogo").value;
             jogos[indice].plataformaJogo = document.getElementById("plataforma_jogo").value;
+            // jogos[indice].anoPubli = document.getElementById("ano_publi").value;
             localStorage.setItem("jogos", JSON.stringify(jogos));
             console.log("✅ [SALVAR ALTERAÇÕES] Alterações salvas! Redirecionando...");
             alert("Jogo atualizado com sucesso!");
