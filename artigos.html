@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="PT-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <title>JustSearch</title>
+</head>
+<body>
+
+    <!-- FORMULÁRIO DE CASDASTRO DE ARTIGOS -->
+    <div class="artigo">
+        <div class="">
+            <i class=""></i>Cadastrar um artigo
+        </div>
+            <div class="">
+            <div class="">
+                <label for="nomeArtigo" class="">Nome do Artigo</label>
+                <input type="text" class="form-control" id="txt-nomeArtigo" placeholder="Escolha um nome para o seu artigo">
+            </div>
+            <div class="">
+                <label for="Categoria" class="form-label">Categoria</label>
+                <select class="form-select" id="Categoria">
+                    <option value="">Selecione</option>
+                    <option value="Científico">Científico</option>
+                    <option value="Acadêmico">Acadêmico</option>
+                </select>
+            </div>
+            <div class="">
+                <label for="DescricaoArtigo" class="form-label">Síntese</label>
+                <input type="text" class="form-control" id="DescricaoArtigo" placeholder="Escreva uma breve introdução sobre o seu artigo">
+            </div>
+            <div class="">
+                <label for="Privacidade" class="form-label">Privacidade</label>
+                <select class="form-select" id="Privacidade">
+                    <option value="Público">Público</option>
+                    <option value="Privado">Privado</option>
+                </select>
+            </div>
+        </div>
+        <div class="">
+            <button type="button" class="btn-primary" id="btnAdicionar">
+                <i class=""></i> Adicionar
+            </button>
+            <button type="button" class="btn-success" id="btnSalvar">
+                <i class=""></i> Salvar Alteração
+            </button>
+            <span id="msgForm" class=""></span>
+        </div>
+    </div>
+    <div class="mt-4" id="listaArtigos"></div>
+    <script src="artigos.js"></script>
+</body>
+</html>
