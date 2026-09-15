@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetShop - Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            min-height: 100vh;
+        }
+        .brand-header {
+            background: #0369a1;
+            color: white;
+            padding: 18px 0;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .brand-header h1 {
+            font-size: 2rem;
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .brand-header p {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.85;
+        }
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .nav-tabs .nav-link {
+            color: #0369a1;
+            font-weight: 600;
+        }
+        .nav-tabs .nav-link.active {
+            color: #0369a1;
+            border-bottom: 3px solid #0369a1;
+        }
+        .btn-primary {
+            background: #0369a1;
+            border-color: #0369a1;
+        }
+        .btn-primary:hover {
+            background: #025785;
+            border-color: #025785;
+        }
+        .paw-icon {
+            font-size: 2.8rem;
+            margin-bottom: 6px;
+        }
+        #msgLogin, #msgCadastro {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="brand-header">
+        <div class="paw-icon"><i class="fa-solid fa-paw"></i></div>
+        <h1>PetShop</h1>
+        <p>Cuidando com amor do seu melhor amigo</p>
+    </div>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="card p-4">
+                    <ul class="nav nav-tabs mb-4" id="abas">
+                        <li class="nav-item w-50 text-center">
+                            <button class="nav-link active w-100" id="abaLogin" onclick="trocarAba('login')">
+                                <i class="fa-solid fa-right-to-bracket me-1"></i> Entrar
+                            </button>
+                        </li>
+                        <li class="nav-item w-50 text-center">
+                            <button class="nav-link w-100" id="abaCadastro" onclick="trocarAba('cadastro')">
+                                <i class="fa-solid fa-user-plus me-1"></i> Cadastrar
+                            </button>
+                        </li>
+                    </ul>
+
+                    <!-- PAINEL LOGIN -->
+                    <div id="painelLogin">
+                        <h5 class="mb-3 text-secondary">Acesse sua conta</h5>
+                        <div class="mb-3">
+                            <label for="loginEmail" class="form-label">E-mail</label>
+                            <input type="email" class="form-control" id="loginEmail" placeholder="seu@email.com">
+                        </div>
+                        <div class="mb-3">
+                            <label for="loginSenha" class="form-label">Senha</label>
+                            <input type="password" class="form-control" id="loginSenha" placeholder="••••••••">
+                        </div>
+                        <div class="alert alert-danger" id="msgLogin" role="alert"></div>
+                        <button type="button" class="btn btn-primary w-100" id="btnLogin">
+                            <i class="fa-solid fa-right-to-bracket me-1"></i> Entrar
+                        </button>
+                        <div class="mt-3 p-2 rounded text-center" style="background:#f0f9ff;font-size:0.8rem;color:#0369a1;">
+                            <i class="fa-solid fa-shield-halved me-1"></i>
+                            <strong>Admin:</strong> admin@petshop.com / admin123
+                        </div>
+                    </div>
+
+                    <!-- PAINEL CADASTRO -->
+                    <div id="painelCadastro" style="display:none;">
+                        <h5 class="mb-3 text-secondary">Crie sua conta</h5>
+                        <div class="mb-3">
+                            <label for="cadNome" class="form-label">Nome completo</label>
+                            <input type="text" class="form-control" id="cadNome" placeholder="João da Silva">
+                        </div>
+                        <div class="mb-3">
+                            <label for="cadEmail" class="form-label">E-mail</label>
+                            <input type="email" class="form-control" id="cadEmail" placeholder="seu@email.com">
+                        </div>
+                        <div class="mb-3">
+                            <label for="cadTelefone" class="form-label">Telefone</label>
+                            <input type="text" class="form-control" id="cadTelefone" placeholder="(41) 99999-9999">
+                        </div>
+                        <div class="mb-3">
+                            <label for="cadSenha" class="form-label">Senha</label>
+                            <input type="password" class="form-control" id="cadSenha" placeholder="••••••••">
+                        </div>
+                        <div class="alert alert-success" id="msgCadastro" role="alert"></div>
+                        <button type="button" class="btn btn-primary w-100" id="btnCadastrar">
+                            <i class="fa-solid fa-user-plus me-1"></i> Cadastrar
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script src="index.js"></script>
+</body>
+</html>
