@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <title>Cadastro de Serie</title>
+</head>
+<body>
+    <script src="serie.js"></script>
+    <header class="d-flex justify-content-center py-3"> 
+        <ul class="nav nav-pills"> 
+            <li class="nav-item"><a href="serie.html" class="nav-link">Serie</a></li> 
+            <li class="nav-item"><a href="livros.html" class="nav-link">Livros</a></li> 
+            <li class="nav-item"><a href="games.html" class="nav-link">Games</a></li> 
+            <li class="nav-item"><a href="filmes.html" class="nav-link">Filme</a></li> 
+            <li class="nav-item"><a href="artigos.html" class="nav-link">Artigos</a></li> 
+        </ul> 
+    </header>
+
+    <form> 
+        <h1 class="h3 mb-3 fw-normal">Cadastro de Serie</h1> 
+        <div class="form-floating"> 
+            <input type="text" class="form-control" id="nome_serie" placeholder="Nome da Serie"> 
+            <label for="nome_serie">Nome da Serie</label> 
+        </div> 
+        <br>
+        <div class="form-floating"> 
+            <input type="text" class="form-control" id="nome_autor" placeholder="Nome do Autor"> 
+            <label for="nome_autor">Nome do Autor </label> 
+        </div> 
+        <br>
+        <div class="form-floating"> 
+            <input type="text" class="form-control" id="categoria_serie" placeholder="Categoria Serie"> 
+            <label for="categoria_serie">Categoria Serie</label> 
+        </div> 
+        <br>
+        <div class="form-floating"> 
+            <input type="date" class="form-control" id="ano_lancamento" placeholder="Ano de Lançamento"> 
+            <label for="ano_lancamento">Ano de Lançamento</label> 
+        </div> 
+        <br>
+        <p id="msgForm" class="text-danger fw-bold my-2"></p>
+        <button id="cadastro" class="btn btn-primary w-100 py-2" type="submit">Cadastrar Serie</button>
+        <button id="btnSalvar" class="btn btn-success w-100 py-2 mt-2" type="button" style="display: none;"> Salvar Alterações</button>
+    </form>
+
+    <div id="listaseries" class="mt-4"></div>
+</body>
+</html>
