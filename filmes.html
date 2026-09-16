@@ -9,33 +9,41 @@
 <body>
     <header class="d-flex justify-content-center py-3"> 
         <ul class="nav nav-pills"> 
+            <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li> 
             <li class="nav-item"><a href="#" class="nav-link">Usuário</a></li> 
-            <li class="nav-item"><a href="#" class="nav-link">Livros</a></li> 
+            <li class="nav-item"><a href="livros.html" class="nav-link">Livros</a></li> 
             <li class="nav-item"><a href="games.html" class="nav-link">Games</a></li> 
             <li class="nav-item"><a href="filmes.html" class="nav-link">Filme</a></li> 
-            <li class="nav-item"><a href="#" class="nav-link">Artigos</a></li> 
+            <li class="nav-item"><a href="artigos.html" class="nav-link">Artigos</a></li> 
         </ul> 
     </header>
 
     <form> 
         <h1 class="h3 mb-3 fw-normal">Cadastro de Filmes</h1> 
-        <div class="form-floating"> <input type="text" class="form-control" id="floatingInput" placeholder="Shrek"> 
+        <div class="form-floating"> <input type="text" class="form-control" id="nomeFilme" placeholder="Shrek"> 
             <label for="floatingInput">Nome do filme</label> 
         </div> 
         <div class="form-floating"> 
-            <input type="date" class="form-control" id="floatingPassword" placeholder="Anodelancamento"> <label for="floatingPassword">Ano de lançamento</label> 
+            <input type="date" class="form-control" id="anoFilme" placeholder="Anodelancamento"> <label for="floatingPassword">Ano de lançamento</label> 
         </div> 
         <div class="form-floating"> 
-            <input type="text" class="form-control" id="floatingDiretor" placeholder="Diretor"> <label for="floatingDiretor">Diretor</label>
+            <input type="text" class="form-control" id="diretorFilme" placeholder="Diretor"> <label for="floatingDiretor">Diretor</label>
         </div> 
         <div class="form-floating"> 
-            <input type="text" class="form-control" id="floatingGenero" placeholder="Genero"> <label for="floatingGenero">Gênero</label>
+            <input type="text" class="form-control" id="generoFilme" placeholder="Genero"> <label for="floatingGenero">Gênero</label>
         </div> 
         <div class="form-floating"> 
-            <input type="text" class="form-control" id="floatingIdioma" placeholder="Idioma"> <label for="floatingIdioma">Idioma</label>
+            <input type="text" class="form-control" id="idiomaFilme" placeholder="Idioma"> <label for="floatingIdioma">Idioma</label>
         </div> 
-        <button class="btn btn-primary w-100 py-2" type="submit">Cadastrar</button>
+        <div id="msgForm" class="text-danger text-center mb-3"></div>
+            <button id="btnAdicionar" class="btn btn-primary w-100 py-2 mb-2" type="button">Cadastrar</button>
+        
+        <button id="btnSalvar" class="btn btn-success w-100 py-2" type="button" style="display: none;">Salvar Edição</button>
     </form>
+
+        <div id="listaFilmes" class="mt-4"></div>
+    <div id="listaFilmes">
     
+    <script src="filmes.js"></script>
 </body>
 </html>
