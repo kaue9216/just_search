@@ -138,36 +138,51 @@ function carregaRegistros(){
 }
 
 function executaAcao(acao, indice, url){
+    console.log(`⚙️ [EXECUTA AÇÃO] Disparada ação "${acao}" no índice [${indice}]`);
     // PRIMEIRO PASSO
     var jogos = JSON.parse(localStorage.getItem("jogos"));
 
+    if(!jogos || !jogos[indice]){
+        console.error(`❌ [EXECUTA AÇÃO] Erro: Índice [${indice}] não existe no array de jogos.`);
+        return;
+    }
+
     if(acao == 'excluir'){
+        console.log("🗑️ [EXCLUIR] Removendo jogo:", jogos[indice]);
         jogos.splice(indice, 1);
         alert("Jogo excluído com sucesso!");
+        console.log("✅ [EXCLUIR] Remoção concluída. Redirecionando para limpar parâmetros da URL...");
 
         // ULTIMO PASSO
         localStorage.setItem("jogos", JSON.stringify(jogos));
         window.location.href = url; // RECARREGA A TELA
 
+        
+
     }else if(acao == 'alterar'){
+        console.log("✏️ [ALTERAR] Populando formulário com o jogo selecionado:", jogos[indice]);
         // Carrega valores nos inputs
-        var novoJogo = jogos[indice];
-        document.getElementById("nome_jogo").value = novoJogo.nome_jogo;
-        document.getElementById("publisher_jogo").value = novoJogo.publisher_jogo;
-        document.getElementById("genero_jogo").value = novoJogo.genero_jogo;
-        document.getElementById("plataforma_jogo").value = novoJogo.plataforma_jogo;
-        document.getElementById("btnAdicionar").disabled = true;
+        var obj = jogos[indice];
+        document.getElementById("nome_jogo").value = obj.nomeJogo;
+        document.getElementById("publisher_jogo").value = obj.publisherJogo;
+        document.getElementById("genero_jogo").value = obj.generoJogo || "";
+        document.getElementById("plataforma_jogo").value = obj.plataformaJogo || "";
 
         // Insere o botão Salvar na tela
-        document.getElementById("btnSalvar").style.display = "inline-block";
+        document.getElementById("cadastro").disabled = true;
+        var btnSalvar = document.getElementById("btnSalvar");
+        btnSalvar.style.display = "block";
+        console.log("✏️ [ALTERAR] Formulário pronto para edição. Aguardando clique em #btnSalvar...");
 
         // Escuta o botão salvar
-        document.getElementById("btnSalvar").addEventListener("click", () => {
-            jogos[indice].nome_jogo = document.getElementById("nome_jogo").value;
-            jogos[indice].publisher_jogo = document.getElementById("publisher_jogo").value;
-            jogos[indice].genero_jogo = document.getElementById("genero_jogo").value;
-            jogos[indice].plataforma_jogo = document.getElementById("plataforma_jogo").value;
+        btnSalvar.addEventListener("click", () => {
+            jogos[indice].nomeJogo = document.getElementById("nome_jogo").value;
+            jogos[indice].publisherJogo = document.getElementById("publisher_jogo").value;
+            jogos[indice].generoJogo = document.getElementById("genero_jogo").value;
+            jogos[indice].plataformaJogo = document.getElementById("plataforma_jogo").value;
             localStorage.setItem("jogos", JSON.stringify(jogos));
+            console.log("✅ [SALVAR ALTERAÇÕES] Alterações salvas! Redirecionando...");
+            alert("Jogo atualizado com sucesso!");
             window.location.href = url;
         });
 
