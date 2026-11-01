@@ -5,3 +5,4 @@ async function valida_sessao(){
         window.location.href = '../login/';
     }
 }
+
