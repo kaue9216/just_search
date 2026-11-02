@@ -1,0 +1,64 @@
+---
+description: Contexto, requisitos da atividade e convenções do projeto JustSearch (PHP + MySQL + JS puro)
+alwaysApply: true
+---
+
+# Contexto — JustSearch
+
+Atividade prática da PUCPR: **Persistência em Banco de Dados, FRONT > BACK > BANCO**. A solução deve se basear **somente** em: a Apostila Módulo III (Aulas 7–9), o exemplo do professor em `.template-giulio/` e o que foi visto em sala. **Não introduza frameworks, bibliotecas ou técnicas não vistas** (nada de PDO, Composer, React, jQuery, ORM etc.). Código simples que o aluno consiga explicar vale mais que código sofisticado. Não edite `.template-giulio/` nem `.historico_ra1/`.
+
+## Requisitos da atividade (fonte da verdade)
+- **1 aluno = 1 CRUD completo** (Create, Read, Update, Delete), de ponta a ponta, em tabela MySQL. Nº de integrantes ainda a confirmar (RA1 tinha 5 módulos → provavelmente 5 CRUDs).
+- Tabelas devem refletir, se possível, o modelo lógico do grupo na disciplina de Banco de Dados.
+- **Proibido `localStorage`** para dados. Tudo em MySQL.
+- JS **nunca** acessa o banco; sempre `fetch` → PHP.
+- Conexão num **único** `php/conexao.php`. Nunca expor dados de conexão no front.
+- **Todo SQL com dado do usuário**: `prepare()` + `bind_param()` + `execute()`. Nunca concatenar.
+- Resposta **sempre JSON** `{status, mensagem, data}`.
+- Front usa `fetch()`, `FormData`, `resposta.json()`; PHP lê `$_POST` e `$_GET`.
+- Pastas organizadas por função (html/js/php).
+- **Login e sessão NÃO são exigidos.** O login existente é extra: não expanda, não o torne pré-requisito dos CRUDs.
+- Interface organizada; Bootstrap é opcional e recomendado (RA1 usava Bootstrap 5.3.8 via CDN). CSS não é diferencial.
+- Entrega: código, `banco.sql` (banco + tabelas + registros de exemplo), integrantes identificados. Deve funcionar importando o `.sql` em banco vazio, em qualquer navegador. Na apresentação, mostra-se o registro no phpMyAdmin após cada operação.
+
+## Stack e estrutura
+HTML + JS puro; PHP procedural com `mysqli`; MySQL (XAMPP, banco `projeto`, `utf8mb4`).
+```
+index.html → login/   |  home/*.html   |  js/*.js   |  php/*.php   |  banco.sql
+```
+Tabelas: `artigos(id,titulo,conteudo,autor)` = CRUD atual; `cliente(id,nome,email,usuario,senha,ativo,instagram)` = só login extra.
+
+## Convenções (seguir exatamente o padrão da apostila)
+1. Todo PHP: `include_once('conexao.php');`, depois
+   `$retorno = ['status'=>'', 'mensagem'=>'', 'data'=>[]];`, ao final `$stmt->close(); $conexao->close();`, `header('Content-type: application/json; charset=utf-8'); echo json_encode($retorno);`.
+2. `conexao.php` (apostila 8.3): `$servidor='localhost:3306'`, usuário `root`, senha `''` (padrão XAMPP), banco `projeto`; em falha de conexão responder JSON `nok` e `exit`; `set_charset('utf8mb4')`.
+3. Nomes: `php/<entidade>_get|novo|alterar|excluir.php`; `home/<entidade>_novo.html|_alterar.html`; `js/<entidade>_novo.js|_alterar.js`; a lista fica em `home/index.html` + `js/index.js` (ou uma página/JS de lista por entidade se houver vários CRUDs).
+4. `_get.php`: `isset($_GET['id'])` → busca um (`bind_param('i', ...)`), senão lista todos; mesmo arquivo para os dois casos.
+5. `_novo.php`: dados via `$_POST` (use `?? ''` e `empty()` para validar; retornar `nok` e `exit` antes do `prepare()`); conferir `affected_rows > 0`.
+6. `_alterar.php?id=X`: id via `$_GET`, dados via `$_POST`; `_excluir.php?id=X`: id via `$_GET` (GET na exclusão é o padrão da apostila — mantenha).
+7. `bind_param`: `i` inteiro, `s` string, `d` decimal; a string de tipos segue a ordem dos `?`.
+8. JS: alterar tem **duas fases** (carregar por id com `URLSearchParams` → preencher form; depois `POST` com `FormData` e `?id=`). Após sucesso: `alert('SUCESSO: ...')` e `window.location.href='../home/'`; erro: `alert('ERRO: ...')`.
+9. Exclusão: `confirm()` antes de chamar o PHP (o guia do professor pede), depois `window.location.reload()`.
+10. Se a página usa o login extra, chama `valida_sessao()` no `DOMContentLoaded` e inclui `../js/valida_sessao.js`.
+11. Texto de interface, comentários e mensagens em português (pt-BR); comentar o código de forma didática, como no material do professor, pois o aluno precisa explicá-lo.
+
+## Para criar um novo CRUD (molde = `artigos`)
+1. `CREATE TABLE IF NOT EXISTS` + `INSERT` de exemplo no `banco.sql`.
+2. `php/<x>_get.php`, `_novo.php`, `_alterar.php`, `_excluir.php`.
+3. `home/<x>_novo.html`, `<x>_alterar.html` (+ `<input type="hidden" id="id">`), `js/<x>_novo.js`, `<x>_alterar.js`, e lista.
+4. Link na navegação. Campos de cada módulo na RA1: filme (nome, data lançamento, diretor, gênero, idioma); livro (título, autor, gênero, editora); série (nome, autor, categoria, ano); jogo (nome, publisher, gênero, plataforma, ano).
+5. Atualizar a tabela "Estado atual" do README.
+
+## Pendências conhecidas (por prioridade)
+1. Criar os CRUDs restantes (séries, livros, games, filmes).
+2. `conexao.php`: erro em `echo` (quebra JSON) e senha `"root"` (XAMPP padrão é vazia).
+3. Validação `?? ''`/`empty()` em `artigo_novo.php` e `artigo_alterar.php`.
+4. `confirm()` na exclusão (`js/index.js`).
+5. Sem CSS: aplicar Bootstrap + navegação; `conteudo` como `<textarea>`.
+6. Lista vazia: `artigo_get.php` devolve `nok` e a tela fica em branco → mostrar "Nenhum registro".
+7. `artigos_alterar.js` dá `alert("SUCESSO")` ao só carregar.
+8. `lang="en"` nos HTMLs; `.gitignore`/`.gitattributes` vazios.
+Extras opcionais (fora do escopo; só se o grupo souber explicar): hash de senha, checagem de sessão nos endpoints, escape HTML na listagem.
+
+## Ao alterar `banco.sql`
+Manter `CREATE ... IF NOT EXISTS`, registros de exemplo, e a possibilidade de importar em banco vazio. Atualizar a seção Banco de dados do README.
