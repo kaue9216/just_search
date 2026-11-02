@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Games - JustSearch</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="brand-header">
+            <div class="logo-box">
+                <span class="logo-badge">JS</span>
+                <span class="logo-text">JustSearch</span>
+            </div>
+        </header>
+
+        <main class="main-card">
+            <h1 class="page-title">Selecione o Módulo de Gerenciamento</h1>
+            <hr class="divider">
+
+            <div class="module-nav">
+                <button class="btn nav-btn" onclick="window.location.href='../home/index.html'">Gerenciar Clientes / Artigos</button>
+                <button class="btn nav-btn active" onclick="window.location.href='../games/index_games.html'">Gerenciar Games</button>
+            </div>
+
+            <hr class="divider">
+
+            <div class="toolbar">
+                <button id="novo" class="btn btn-primary">Novo Registro</button>
+                <button id="logoff" class="btn btn-danger">Logoff</button>
+            </div>
+
+            <div id="lista" class="table-wrapper">
+                <!-- Tabela dinâmica inserida via JS -->
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/index_games.js"></script>
+    <script src="../js/valida_sessao.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => { valida_sessao(); });
+    </script>
+</body>
+</html>
