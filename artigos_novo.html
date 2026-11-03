@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artigo NOVO</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="topo">
+        <a class="logo" href="index.html">
+            <span class="logo-marca">JS</span>
+            <span class="logo-nome">JustSearch</span>
+        </a>
+        <nav class="menu">
+            <a class="btn btn-secundario" href="index.html">Voltar</a>
+        </nav>
+    </header>
+
+    <main class="formulario formulario-estreito">
+        <h2>Cadastre um artigo:</h2>
+        <div class="campos">
+            <div class="campo">
+                <label for="titulo">Título:</label>
+                <input type="text" id="titulo" placeholder="título...">
+            </div>
+            <div class="campo campo-largo">
+                <label for="conteudo">Conteúdo:</label>
+                <textarea id="conteudo" rows="4" placeholder="conteúdo..."></textarea>
+            </div>
+            <div class="campo">
+                <label for="autor">Autor:</label>
+                <input type="text" id="autor" placeholder="autor...">
+            </div>
+        </div>
+        <div class="form-acoes">
+            <button class="btn" id="enviar">Enviar</button>
+        </div>
+    </main>
+
+    <script src="../js/valida_sessao.js"></script>
+    <script src="../js/artigos_novo.js"></script>
+</body>
+</html>

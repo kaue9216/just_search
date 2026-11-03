@@ -1,0 +1,536 @@
+/* =========================================================
+   JustSearch — estilo baseado nos mockups
+   Visual: fundo branco, caixas com borda fina cinza,
+   tipografia monoespaçada nos conteúdos e logo cinza.
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Inter:wght@400;500&display=swap');
+
+:root {
+    --fundo: #ffffff;
+    --fundo-suave: #f5f5f5;
+    --borda: #8a8a8a;
+    --borda-clara: #d4d4d4;
+    --texto: #111111;
+    --texto-medio: #555555;
+    --texto-claro: #777777;
+    --logo: #c9c9c9;
+    --link: #444444;
+    --perigo: #b42318;
+    --fonte-mono: 'Roboto Mono', ui-monospace, Consolas, monospace;
+    --fonte-logo: 'Inter', Arial, sans-serif;
+    --largura: 960px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--fundo);
+    color: var(--texto);
+    font-family: var(--fonte-mono);
+    font-size: 15px;
+    line-height: 1.5;
+    padding: 24px 16px 48px;
+}
+
+h1, h2, h3 {
+    margin: 0;
+}
+
+a {
+    color: var(--link);
+}
+
+/* ---------- Cabeçalho com logo ---------- */
+.topo {
+    max-width: var(--largura);
+    margin: 0 auto 12px;
+    border: 1px solid var(--borda);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    min-height: 80px;
+}
+
+.logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+}
+
+.logo-marca {
+    width: 58px;
+    height: 58px;
+    background: var(--logo);
+    color: #ffffff;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: flex-end;
+    justify-content: center;
+    font-family: var(--fonte-logo);
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 1;
+    padding-bottom: 6px;
+    letter-spacing: -2px;
+}
+
+.logo-nome {
+    font-family: var(--fonte-logo);
+    font-size: 36px;
+    color: var(--texto-medio);
+    letter-spacing: -0.5px;
+}
+
+.menu {
+    position: absolute;
+    right: 16px;
+    display: flex;
+    gap: 8px;
+}
+
+/* ---------- Botões ---------- */
+.btn {
+    font-family: var(--fonte-mono);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 16px;
+    border: 1px solid var(--texto);
+    background: var(--texto);
+    color: #ffffff;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn:hover {
+    background: #333333;
+}
+
+.btn-secundario {
+    background: var(--fundo);
+    color: var(--texto);
+    border-color: var(--borda);
+}
+
+.btn-secundario:hover {
+    background: var(--fundo-suave);
+}
+
+/* ---------- Layout da listagem (lateral + resultados) ---------- */
+.layout {
+    max-width: var(--largura);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+.lateral {
+    border: 1px solid var(--borda);
+    padding: 14px 14px 24px;
+    min-height: 300px;
+}
+
+.lateral h2 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--texto-medio);
+    margin-bottom: 14px;
+}
+
+.lateral ul {
+    margin: 0;
+    padding: 0 0 0 4px;
+    list-style: none;
+}
+
+.lateral li {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 4px;
+    padding-left: 22px;
+    position: relative;
+}
+
+.lateral li::before {
+    content: "-";
+    position: absolute;
+    left: 0;
+    color: var(--texto-medio);
+}
+
+.lateral a {
+    color: var(--texto-medio);
+}
+
+.lateral a:hover {
+    color: var(--texto);
+}
+
+/* ---------- Barra de pesquisa ---------- */
+.busca {
+    display: flex;
+    border: 1px solid var(--borda);
+    margin-bottom: 24px;
+}
+
+.busca input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-family: var(--fonte-mono);
+    font-size: 17px;
+    color: var(--texto-medio);
+    padding: 6px 10px;
+    min-width: 0;
+}
+
+.busca button {
+    border: none;
+    background: transparent;
+    padding: 0 10px;
+    cursor: pointer;
+    color: var(--texto);
+    display: flex;
+    align-items: center;
+}
+
+.conteudo > h2 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--texto-medio);
+    margin: 0 0 14px 6px;
+}
+
+/* ---------- Lista de resultados ---------- */
+.resultados {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.resultado {
+    display: flex;
+    gap: 14px;
+    padding: 12px 6px;
+    border-bottom: 1px solid var(--borda-clara);
+}
+
+.resultado:last-child {
+    border-bottom: none;
+}
+
+.capa {
+    flex: 0 0 72px;
+    height: 104px;
+    border: 1px solid var(--borda-clara);
+    background: var(--fundo-suave);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.capa img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.sem-capa {
+    font-size: 10px;
+    color: var(--texto-claro);
+    text-align: center;
+}
+
+.info {
+    flex: 1;
+    min-width: 0;
+}
+
+.info h3 {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.info .meta {
+    font-size: 13px;
+    color: var(--texto-medio);
+    text-decoration: underline;
+}
+
+.info p {
+    margin: 6px 0 8px;
+    font-size: 13px;
+    color: var(--texto-claro);
+}
+
+.acoes {
+    display: flex;
+    gap: 16px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.acoes .perigo {
+    color: var(--perigo);
+}
+
+.vazio {
+    color: var(--texto-claro);
+    margin-left: 6px;
+}
+
+/* ---------- Formulário (novo / alterar) ---------- */
+.formulario {
+    max-width: var(--largura);
+    margin: 0 auto;
+    border: 1px solid var(--borda);
+    padding: 16px 24px 28px;
+}
+
+.formulario > h2 {
+    text-align: center;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--texto-medio);
+    margin-bottom: 28px;
+}
+
+.form-grade {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 32px;
+    align-items: start;
+}
+
+.campos {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.campo {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    align-items: center;
+    gap: 8px;
+}
+
+.campo label {
+    text-align: right;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--texto-medio);
+}
+
+.campo-largo {
+    align-items: start;
+}
+
+.campo input,
+.campo textarea {
+    font-family: var(--fonte-mono);
+    font-size: 13px;
+    border: 1px solid var(--borda);
+    padding: 6px 8px;
+    width: 100%;
+    max-width: 360px;
+    color: var(--texto);
+}
+
+.campo textarea {
+    max-width: none;
+    resize: vertical;
+}
+
+.campo input:focus,
+.campo textarea:focus {
+    outline: 2px solid var(--texto);
+    outline-offset: -1px;
+}
+
+/* Caixa de upload com o ícone de nuvem */
+.upload {
+    border: 1px solid var(--borda);
+    height: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    color: var(--texto);
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    padding: 10px;
+}
+
+.upload:hover {
+    background: var(--fundo-suave);
+}
+
+.upload input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.upload span {
+    font-size: 12px;
+    color: var(--texto-medio);
+    word-break: break-all;
+    position: relative;
+}
+
+.upload img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.25;
+}
+
+.upload svg {
+    position: relative;
+}
+
+.form-acoes {
+    margin-top: 28px;
+    text-align: center;
+}
+
+/* ---------- Telas pequenas ---------- */
+@media (max-width: 720px) {
+    .topo {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .menu {
+        position: static;
+    }
+
+    .logo-marca {
+        width: 44px;
+        height: 44px;
+        font-size: 30px;
+    }
+
+    .logo-nome {
+        font-size: 28px;
+    }
+
+    .layout,
+    .form-grade {
+        grid-template-columns: 1fr;
+    }
+
+    .lateral {
+        min-height: 0;
+    }
+
+    .campo {
+        grid-template-columns: 1fr;
+    }
+
+    .campo label {
+        text-align: left;
+        font-size: 15px;
+    }
+
+    .campo input {
+        max-width: none;
+    }
+}
+
+/* ---------- Login e formulários menores ---------- */
+.formulario-estreito {
+    max-width: 640px;
+}
+
+.formulario-estreito .campo input,
+.formulario-estreito .campo textarea {
+    max-width: none;
+}
+
+/* ---------- Página inicial (painel) ---------- */
+.painel {
+    max-width: var(--largura);
+    margin: 0 auto;
+    border: 1px solid var(--borda);
+    padding: 20px 24px 28px;
+}
+
+.painel h1 {
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 6px;
+}
+
+.painel > h2 {
+    font-size: 16px;
+    color: var(--texto-medio);
+    text-align: center;
+    margin-bottom: 18px;
+}
+
+.modulos {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--borda-clara);
+    margin-bottom: 20px;
+}
+
+.painel > h2.titulo-lista {
+    text-align: left;
+    margin-bottom: 12px;
+}
+
+/* ---------- Tabela de artigos ---------- */
+.tabela {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.tabela th,
+.tabela td {
+    text-align: left;
+    padding: 10px 8px;
+    border-bottom: 1px solid var(--borda-clara);
+    vertical-align: top;
+}
+
+.tabela th {
+    color: var(--texto-medio);
+    border-bottom: 1px solid var(--borda);
+}
+
+.tabela td.acoes {
+    white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+    .painel {
+        padding: 16px;
+    }
+    .tabela th:nth-child(2),
+    .tabela td:nth-child(2) {
+        display: none;
+    }
+}

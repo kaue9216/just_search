@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filme NOVO</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="topo">
+        <a class="logo" href="filmes.html">
+            <span class="logo-marca">JS</span>
+            <span class="logo-nome">JustSearch</span>
+        </a>
+        <nav class="menu">
+            <a class="btn btn-secundario" href="filmes.html">Voltar</a>
+        </nav>
+    </header>
+
+    <main class="formulario">
+        <h2>Cadastre um filme:</h2>
+
+        <div class="form-grade">
+            <div class="campos">
+                <div class="campo">
+                    <label for="titulo">Título:</label>
+                    <input type="text" id="titulo" placeholder="título...">
+                </div>
+                <div class="campo">
+                    <label for="diretor">Diretor:</label>
+                    <input type="text" id="diretor" placeholder="diretor...">
+                </div>
+                <div class="campo">
+                    <label for="genero">Gênero:</label>
+                    <input type="text" id="genero" placeholder="gênero...">
+                </div>
+                <div class="campo">
+                    <label for="ano">Ano:</label>
+                    <input type="number" id="ano" placeholder="ano..." min="1888" max="2100">
+                </div>
+                <div class="campo campo-largo">
+                    <label for="sinopse">Sinopse:</label>
+                    <textarea id="sinopse" rows="4" placeholder="sinopse..."></textarea>
+                </div>
+            </div>
+
+            <label class="upload" for="capa">
+                <img id="preview" alt="" hidden>
+                <svg viewBox="0 0 64 64" width="80" height="80" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 46h-4a12 12 0 0 1-1-24 16 16 0 0 1 31-3 11 11 0 0 1 2 22h-4"></path>
+                    <line x1="32" y1="54" x2="32" y2="30"></line>
+                    <polyline points="24 38 32 30 40 38"></polyline>
+                </svg>
+                <span id="nome_arquivo">Clique para escolher a capa</span>
+                <input type="file" id="capa" accept="image/jpeg,image/png,image/webp,image/gif">
+            </label>
+        </div>
+
+        <div class="form-acoes">
+            <button class="btn" id="enviar">Enviar</button>
+        </div>
+    </main>
+
+    <script src="../js/valida_sessao.js"></script>
+    <script src="../js/filmes_novo.js"></script>
+</body>
+</html>
