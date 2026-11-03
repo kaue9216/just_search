@@ -1,4 +1,5 @@
 <?php
+include_once('conexao.php');
 
     $retorno = [
         'status'   => '',
@@ -15,7 +16,7 @@
         $numero_paginas = $_POST["numero_paginas"];
 
         $stmt = $conexao->prepare("UPDATE livros SET titulo = ?, autor = ?, editora = ?, ano = ?, genero = ?, numero_paginas = ? WHERE id = ?");
-        $stmt->bind_param("sssi", $titulo, $autor, $editora, $ano, $genero, $numero_paginas, $_GET['id']);
+        $stmt->bind_param("sssisii", $titulo, $autor, $editora, $ano, $genero, $numero_paginas, $_GET['id']);
         $stmt->execute();
 
         if($stmt->affected_rows > 0){

@@ -20,10 +20,18 @@ async function logoff() {
 }
 
 async function buscar() {
-    const retorno = await fetch("../php/artigo_get.php");
-    const resposta = await retorno.json();
-    if (resposta.status == "ok") {
-        preencherTabela(resposta.data);
+    try {
+        const retorno = await fetch("../php/artigo_get.php");
+        const resposta = await retorno.json();
+        if (resposta.status == "ok") {
+            preencherTabela(resposta.data);
+        } else {
+            document.getElementById("lista").innerHTML = "<p class='empty-msg'>" + resposta.mensagem + "</p>";
+        }
+    } catch (erro) {
+        // Acontece quando o PHP não roda (página aberta sem Apache) ou devolve erro em vez de JSON
+        document.getElementById("lista").innerHTML = "<p class='empty-msg'>Erro ao buscar os dados. Verifique se o Apache/MySQL estão ligados, se a página foi aberta por http://localhost/... e se o banco.sql foi importado.</p>";
+        console.error(erro);
     }
 }
 
@@ -41,12 +49,15 @@ async function excluir(id) {
 function preencherTabela(tabela) {
     var html = `
         <table>
-            <tr>
-                <th> Titulo </th>
-                <th> Conteudo </th>
-                <th> Autor </th>
-                <th> Ações </th>
-            </tr>`;
+            <thead>
+                <tr>
+                    <th> Título </th>
+                    <th> Conteúdo </th>
+                    <th> Autor </th>
+                    <th> Ações </th>
+                </tr>
+            </thead>
+            <tbody>`;
     for (var i = 0; i < tabela.length; i++) {
         html += `
             <tr>
@@ -54,12 +65,12 @@ function preencherTabela(tabela) {
                 <td>${tabela[i].conteudo}</td>
                 <td>${tabela[i].autor}</td>
                 <td>
-                    <a href='artigos_alterar.html?id=${tabela[i].id}'>Alterar</a>
-                    <a href='#' onclick='excluir(${tabela[i].id})'>Excluir</a>
+                    <a href='artigos_alterar.html?id=${tabela[i].id}' class='btn-action edit'>Alterar</a>
+                    <a href='#' onclick='excluir(${tabela[i].id})' class='btn-action delete'>Excluir</a>
                 </td>
             </tr>
         `;
     }
-    html += '</table>';
+    html += '</tbody></table>';
     document.getElementById("lista").innerHTML = html;
 }

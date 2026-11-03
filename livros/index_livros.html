@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Livros - JustSearch</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="brand-header">
+            <div class="logo-box">
+                <span class="logo-badge">JS</span>
+                <span class="logo-text">JustSearch</span>
+            </div>
+        </header>
+
+        <main class="main-card">
+            <h1 class="page-title">Gerenciamento de Livros</h1>
+            <hr class="divider">
+
+            <div class="module-nav">
+                <button class="btn nav-btn" onclick="window.location.href='../index.html'">Início</button>
+                <button class="btn nav-btn" onclick="window.location.href='../home/index.html'">Artigos</button>
+                <button class="btn nav-btn" onclick="window.location.href='../games/index_games.html'">Games</button>
+                <button class="btn nav-btn active" onclick="window.location.href='../livros/index_livros.html'">Livros</button>
+                <button class="btn nav-btn" onclick="window.location.href='../filmes/index_filmes.html'">Filmes</button>
+                <button class="btn nav-btn" onclick="window.location.href='../series/index_series.html'">Séries</button>
+            </div>
+
+            <hr class="divider">
+
+            <div class="toolbar">
+                <button id="novo" class="btn btn-primary">Novo Registro</button>
+                <button id="logoff" class="btn btn-danger">Logoff</button>
+            </div>
+
+            <div id="lista" class="table-wrapper">
+                <!-- Tabela dinâmica inserida via JS -->
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/valida_sessao.js"></script>
+    <script src="../js/index_livros.js"></script>
+</body>
+</html>

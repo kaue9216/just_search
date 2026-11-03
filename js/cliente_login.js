@@ -17,7 +17,7 @@ async function login(){
     if(resposta.status == "ok"){
         window.location.href = "../home/index.html";
     }else{
-        alert("Credenciais invalidas.");
+        alert("ERRO: " + resposta.mensagem);
     }
 }
 

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filme ALTERAR - JustSearch</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="brand-header">
+            <div class="logo-box">
+                <span class="logo-badge">JS</span>
+                <span class="logo-text">JustSearch</span>
+            </div>
+        </header>
+
+        <main class="main-card form-card">
+            <h2 class="card-header-title">Alterar Filme</h2>
+
+            <div class="form-group">
+                <label for="titulo">Título</label>
+                <input type="text" id="titulo" class="form-control" placeholder="título. . .">
+            </div>
+
+            <div class="form-group">
+                <label for="diretor">Diretor</label>
+                <input type="text" id="diretor" class="form-control" placeholder="diretor. . .">
+            </div>
+
+            <div class="form-group">
+                <label for="genero">Gênero</label>
+                <input type="text" id="genero" class="form-control" placeholder="gênero. . .">
+            </div>
+
+            <div class="form-group">
+                <label for="ano">Ano de lançamento</label>
+                <input type="number" id="ano" class="form-control" placeholder="ano. . .">
+            </div>
+
+            <div class="form-group">
+                <label for="idioma">Idioma</label>
+                <input type="text" id="idioma" class="form-control" placeholder="idioma. . .">
+            </div>
+
+            <input type="hidden" id="id">
+
+            <div class="form-actions">
+                <button id="enviar" class="btn btn-primary">Enviar</button>
+                <button type="button" class="btn btn-secondary" onclick="window.location.href='index_filmes.html'">Voltar</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/valida_sessao.js"></script>
+    <script src="../js/filme_alterar.js"></script>
+</body>
+</html>

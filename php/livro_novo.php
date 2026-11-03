@@ -1,4 +1,5 @@
 <?php
+include_once('conexao.php');
 
     $retorno = [
         'status'   => '',
@@ -14,7 +15,7 @@
     $numero_paginas = $_POST["numero_paginas"];
 
     $stmt = $conexao->prepare("INSERT INTO livros (titulo, autor, editora, ano, genero, numero_paginas) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssi", $titulo, $autor, $editora, $ano, $genero, $numero_paginas);
+    $stmt->bind_param("sssisi", $titulo, $autor, $editora, $ano, $genero, $numero_paginas);
     $stmt->execute();
 
     if($stmt->affected_rows > 0){

@@ -20,10 +20,18 @@ async function logoff() {
 }
 
 async function buscar() {
-    const retorno = await fetch("../php/game_get.php");
-    const resposta = await retorno.json();
-    if (resposta.status == "ok") {
-        preencherTabela(resposta.data);
+    try {
+        const retorno = await fetch("../php/game_get.php");
+        const resposta = await retorno.json();
+        if (resposta.status == "ok") {
+            preencherTabela(resposta.data);
+        } else {
+            document.getElementById("lista").innerHTML = "<p class='empty-msg'>" + resposta.mensagem + "</p>";
+        }
+    } catch (erro) {
+        // Acontece quando o PHP não roda (página aberta sem Apache) ou devolve erro em vez de JSON
+        document.getElementById("lista").innerHTML = "<p class='empty-msg'>Erro ao buscar os dados. Verifique se o Apache/MySQL estão ligados, se a página foi aberta por http://localhost/... e se o banco.sql foi importado.</p>";
+        console.error(erro);
     }
 }
 

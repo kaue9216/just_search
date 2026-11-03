@@ -1,13 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirecionamento</title>
+    <title>JustSearch</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <script>
-        window.location.href = "login/";
-    </script>
+    <div class="app-container">
+        <header class="brand-header">
+            <div class="logo-box logo-large">
+                <span class="logo-badge">JS</span>
+                <span class="logo-text">JustSearch</span>
+            </div>
+        </header>
+
+        <main class="main-card">
+            <h1 class="page-title">Selecione o Módulo de Gerenciamento</h1>
+            <hr class="divider">
+
+            <div class="home-grid">
+                <a class="home-card" href="home/index.html">Artigos<small>Gerenciar artigos</small></a>
+                <a class="home-card" href="games/index_games.html">Games<small>Gerenciar games</small></a>
+                <a class="home-card" href="livros/index_livros.html">Livros<small>Gerenciar livros</small></a>
+                <a class="home-card" href="filmes/index_filmes.html">Filmes<small>Gerenciar filmes</small></a>
+                <a class="home-card" href="series/index_series.html">Séries<small>Gerenciar séries</small></a>
+            </div>
+
+            <hr class="divider">
+            <div class="module-nav">
+                <button class="btn" onclick="window.location.href='login/'">Login</button>
+            </div>
+        </main>
+    </div>
 </body>
 </html>
