@@ -1,0 +1,43 @@
+<?php
+
+    $retorno = [
+        'status'   => '',
+        'mensagem' => '',
+        'data'     => []
+    ];
+
+    if(isset($_GET['id'])){
+        $stmt = $conexao->prepare("SELECT * FROM livros WHERE id = ?");
+        $stmt->bind_param("i", $_GET['id']);
+    }else{
+        $stmt = $conexao->prepare("SELECT * FROM livros");
+    }
+
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+
+    $tabela = [];
+    if($resultado->num_rows > 0){
+        while($linha = $resultado->fetch_assoc()){
+            $tabela[] = $linha;
+        }
+
+        $retorno = [
+            'status'   => 'ok',
+            'mensagem' => 'Sucesso, consulta efetuada.',
+            'data'     => $tabela
+        ];
+    }else{
+        $retorno = [
+            'status'   => 'nok',
+            'mensagem' => 'Nenhum registro encontrado.',
+            'data'     => []
+        ];
+    }
+
+    $stmt->close();
+    $conexao->close();
+
+    header("Content-type:application/json;charset=utf-8");
+    echo json_encode($retorno);
+?>
