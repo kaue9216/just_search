@@ -1,30 +1,29 @@
-document.getElementById("enviar").addEventListener("click", () => {
-    novo();
-});
+// O formulário (<form id="form">) tem um name em cada campo.
+// Para adicionar um campo novo: HTML (input com id e name) + PHP. O JS não muda.
+const form = document.getElementById("form");
 
-async function novo() {
-    var titulo = document.getElementById("titulo").value;
-    var sinopse = document.getElementById("sinopse").value;
-    var diretor = document.getElementById("diretor").value;
-    var genero = document.getElementById("genero").value;
-    var ano = document.getElementById("ano").value;
+form.addEventListener("submit", async (e) => {
+    e.preventDefault(); // não deixa o navegador recarregar a página
+    const btn = document.getElementById("enviar");
+    const fd = new FormData(form); // pega todos os campos que têm name
 
-    const fd = new FormData();
-    fd.append("titulo", titulo);
-    fd.append("sinopse", sinopse);
-    fd.append("diretor", diretor);
-    fd.append("genero", genero);
-    fd.append("ano", ano);
-
-    const retorno = await fetch("../php/filme_novo.php", {
-        method: 'POST',
-        body: fd
-    });
-    const resposta = await retorno.json();
-    if (resposta.status == "ok") {
-        alert("SUCESSO: " + resposta.mensagem);
-        window.location.href = "index_filmes.html";
-    } else {
-        alert("ERRO: " + resposta.mensagem);
+    btn.disabled = true;
+    try {
+        const retorno = await fetch("../php/filme_novo.php", {
+            method: "POST",
+            body: fd
+        });
+        const resposta = await retorno.json();
+        if (resposta.status === "ok") {
+            alert("SUCESSO: " + resposta.mensagem);
+            window.location.href = "index_filmes.html";
+        } else {
+            alert("ERRO: " + resposta.mensagem);
+        }
+    } catch (erro) {
+        alert("ERRO: não foi possível falar com o servidor.");
+        console.error(erro);
+    } finally {
+        btn.disabled = false;
     }
-}
+});

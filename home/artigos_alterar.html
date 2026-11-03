@@ -20,23 +20,25 @@
     <main class="formulario formulario-estreito">
         <h2>Altere o artigo:</h2>
         <input type="hidden" id="id">
+        <form id="form">
         <div class="campos">
             <div class="campo">
                 <label for="titulo">Título:</label>
-                <input type="text" id="titulo" placeholder="título...">
+                <input type="text" id="titulo" name="titulo" placeholder="título...">
             </div>
             <div class="campo campo-largo">
                 <label for="conteudo">Conteúdo:</label>
-                <textarea id="conteudo" rows="4" placeholder="conteúdo..."></textarea>
+                <textarea id="conteudo" name="conteudo" rows="4" placeholder="conteúdo..."></textarea>
             </div>
             <div class="campo">
                 <label for="autor">Autor:</label>
-                <input type="text" id="autor" placeholder="autor...">
+                <input type="text" id="autor" name="autor" placeholder="autor...">
             </div>
         </div>
         <div class="form-acoes">
-            <button class="btn" id="enviar">Enviar</button>
+            <button type="submit" class="btn" id="enviar">Enviar</button>
         </div>
+        </form>
     </main>
 
     <script src="../js/artigos_alterar.js"></script>

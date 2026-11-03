@@ -21,24 +21,26 @@
         <h2>Altere o game:</h2>
         <input type="hidden" id="id">
 
+        <form id="form">
         <div class="campos">
             <div class="campo">
                 <label for="titulo">Título:</label>
-                <input type="text" id="titulo" placeholder="título...">
+                <input type="text" id="titulo" name="titulo" placeholder="título...">
             </div>
             <div class="campo">
                 <label for="conteudo">Descrição:</label>
-                <input type="text" id="conteudo" placeholder="conteúdo...">
+                <input type="text" id="conteudo" name="conteudo" placeholder="conteúdo...">
             </div>
             <div class="campo">
                 <label for="autor">Desenvolvedor:</label>
-                <input type="text" id="autor" placeholder="autor...">
+                <input type="text" id="autor" name="autor" placeholder="autor...">
             </div>
         </div>
 
         <div class="form-acoes">
-            <button class="btn" id="enviar">Enviar</button>
+            <button type="submit" class="btn" id="enviar">Enviar</button>
         </div>
+        </form>
     </main>
 
     <script src="../js/games_alterar.js"></script>

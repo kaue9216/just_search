@@ -1,13 +1,13 @@
-// Lista com pesquisa e barra lateral de desenvolvedores (mesmo molde de filmes).
+// Lista com pesquisa e barra lateral de desenvolvedores.
 // A pesquisa filtra os registros já carregados, sem nova chamada ao PHP.
-var registros = [];
+let registros = [];
 
 document.addEventListener("DOMContentLoaded", () => {
     buscar();
 });
 
 document.getElementById("novo").addEventListener("click", () => {
-    window.location.href = 'games_novo.html';
+    window.location.href = "games_novo.html";
 });
 
 // Pesquisa: clique na lupa ou Enter no campo
@@ -21,11 +21,31 @@ document.getElementById("busca").addEventListener("keydown", (e) => {
     }
 });
 
+// Delegação de eventos: 1 listener na lista cobre todos os botões Excluir,
+// mesmo os criados dinamicamente a cada renderização.
+document.getElementById("lista").addEventListener("click", (e) => {
+    const botao = e.target.closest(".perigo");
+    if (!botao) return;
+    e.preventDefault();
+    excluir(botao.dataset.id);
+});
+
+// Delegação também na barra lateral: clicar numa categoria filtra a lista
+document.getElementById("generos").addEventListener("click", (e) => {
+    const link = e.target.closest("a[data-cat]");
+    if (!link) return;
+    e.preventDefault();
+    const cat = link.dataset.cat;
+    document.getElementById("busca").value = cat;
+    filtrar(cat);
+});
+
 async function buscar() {
     try {
         const retorno = await fetch("../php/game_get.php");
+        if (!retorno.ok) throw new Error("HTTP " + retorno.status);
         const resposta = await retorno.json();
-        if (resposta.status == "ok") {
+        if (resposta.status === "ok") {
             registros = resposta.data;
             preencherLista(registros);
             preencherCategorias(registros);
@@ -43,9 +63,9 @@ async function buscar() {
 
 // Filtra a lista carregada pelo texto digitado
 function filtrar(termo) {
-    var t = termo.trim().toLowerCase();
-    var campos = ["titulo", "conteudo", "autor"];
-    var achados = registros.filter((r) =>
+    const t = termo.trim().toLowerCase();
+    const campos = ["titulo", "conteudo", "autor"];
+    const achados = registros.filter((r) =>
         campos.some((c) => String(r[c] ?? "").toLowerCase().includes(t))
     );
     preencherLista(achados);
@@ -55,13 +75,16 @@ async function excluir(id) {
     if (!confirm("Deseja realmente excluir este game?")) {
         return;
     }
-    const retorno = await fetch("../php/game_excluir.php?id=" + id);
-    const resposta = await retorno.json();
-    if (resposta.status == "ok") {
+    try {
+        const retorno = await fetch("../php/game_excluir.php?id=" + id);
+        if (!retorno.ok) throw new Error("HTTP " + retorno.status);
+        const resposta = await retorno.json();
         alert(resposta.mensagem);
-        window.location.reload();
-    } else {
-        alert(resposta.mensagem);
+        if (resposta.status === "ok") {
+            window.location.reload();
+        }
+    } catch (erro) {
+        alert("ERRO: " + erro.message);
     }
 }
 
@@ -77,19 +100,19 @@ function escapar(texto) {
 }
 
 function preencherLista(tabela) {
-    if (tabela.length == 0) {
+    if (tabela.length === 0) {
         document.getElementById("lista").innerHTML =
             "<p class='vazio'>Nenhum game encontrado.</p>";
         return;
     }
 
-    var html = `<ul class="resultados">`;
+    // 1) começo da lista  2) um <li> por registro  3) fim da lista
+    let html = `<ul class="resultados">`;
 
-    for (var i = 0; i < tabela.length; i++) {
-        var r = tabela[i];
-        var extra = "";
-        var meta = escapar(r.autor);
-        var descricao = `<p>${escapar(r.conteudo)}</p>`;
+    tabela.forEach((r) => {
+        const extra = "";
+        const meta = escapar(r.autor);
+        const descricao = `<p>${escapar(r.conteudo)}</p>`;
         html += `
             <li class="resultado">
                 <div class="info">
@@ -97,39 +120,29 @@ function preencherLista(tabela) {
                     <span class="meta">${meta}</span>
                     ${descricao}
                     <div class="acoes">
-                        <a href='games_alterar.html?id=${r.id}'>Alterar</a>
-                        <a href='#' class="perigo" onclick='excluir(${r.id}); return false;'>Excluir</a>
+                        <a href="games_alterar.html?id=${r.id}">Alterar</a>
+                        <a href="#" class="perigo" data-id="${r.id}">Excluir</a>
                     </div>
                 </div>
             </li>`;
-    }
+    });
 
     html += `</ul>`;
     document.getElementById("lista").innerHTML = html;
 }
 
-// Barra lateral: lista os desenvolvedores cadastrados (mais frequentes primeiro)
+// Barra lateral: lista as categorias cadastradas (mais frequentes primeiro)
 function preencherCategorias(tabela) {
-    var contagem = {};
-    for (var i = 0; i < tabela.length; i++) {
-        var c = tabela[i].autor;
-        contagem[c] = (contagem[c] || 0) + 1;
+    const contagem = {};
+    for (const r of tabela) {
+        const c = r.autor;
+        contagem[c] = (contagem[c] ?? 0) + 1;
     }
-    var itens = Object.keys(contagem).sort((a, b) => contagem[b] - contagem[a]);
+    const itens = Object.keys(contagem).sort((a, b) => contagem[b] - contagem[a]);
 
-    var html = "";
-    for (var j = 0; j < itens.length; j++) {
-        html += `<li><a href="#" data-cat="${escapar(itens[j])}">${escapar(itens[j])}</a></li>`;
-    }
-    var lista = document.getElementById("generos");
-    lista.innerHTML = html;
-
-    lista.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", (e) => {
-            e.preventDefault();
-            var cat = link.getAttribute("data-cat");
-            document.getElementById("busca").value = cat;
-            filtrar(cat);
-        });
+    let html = "";
+    itens.forEach((i) => {
+        html += `<li><a href="#" data-cat="${escapar(i)}">${escapar(i)}</a></li>`;
     });
+    document.getElementById("generos").innerHTML = html;
 }

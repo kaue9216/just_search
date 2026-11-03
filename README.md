@@ -41,7 +41,7 @@ Aplicação web com CRUDs armazenados em **MySQL**, acessados por um back-end **
 | Games | `games` | _(preencher)_ | ✅ Completo |
 | Livros | `livros` | _(preencher)_ | ✅ Completo |
 | Filmes | `filmes` | _(preencher)_ | ✅ Completo |
-| Séries | `series` | _(preencher)_ | ⏳ Tabela e telas HTML prontas; faltam `php/serie_*.php` e `js/index_series.js`, `serie_novo.js`, `serie_alterar.js` |
+| Séries | `series` | _(preencher)_ | ✅ Completo (código do Dudeck, JS no modelo simples; falta testar no navegador) |
 
 A RA1 tinha 5 módulos, o que sugere um grupo de 5. **Confirmar o número de integrantes**, pois define o mínimo de CRUDs. Conferir também se essas tabelas batem com o modelo lógico da disciplina de Banco de Dados.
 
@@ -119,7 +119,7 @@ Resposta de todo PHP: `{ "status": "ok" | "nok", "mensagem": "...", "data": [ ..
 
 **Pendente:**
 
-1. **Séries:** faltam `php/serie_get.php`, `serie_novo.php`, `serie_alterar.php`, `serie_excluir.php` e `js/index_series.js`, `serie_novo.js`, `serie_alterar.js`. Modelo: o CRUD de games (ou livros).
+1. **Séries:** testar no navegador (listar, pesquisar, criar, alterar, excluir).
 2. **Integrantes:** preencher nomes e responsáveis por CRUD nas tabelas acima (exigido na entrega).
 3. **Teste final:** importar `banco.sql` em banco vazio e testar em outro navegador/janela anônima; mostrar o registro no phpMyAdmin após cada operação.
 

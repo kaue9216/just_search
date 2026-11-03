@@ -19,31 +19,33 @@
 
     <main class="formulario formulario-estreito">
         <h2>Cadastre um filme:</h2>
+        <form id="form">
         <div class="campos">
             <div class="campo">
                 <label for="titulo">Título:</label>
-                <input type="text" id="titulo" placeholder="título...">
+                <input type="text" id="titulo" name="titulo" placeholder="título...">
             </div>
             <div class="campo">
                 <label for="diretor">Diretor:</label>
-                <input type="text" id="diretor" placeholder="diretor...">
+                <input type="text" id="diretor" name="diretor" placeholder="diretor...">
             </div>
             <div class="campo">
                 <label for="genero">Gênero:</label>
-                <input type="text" id="genero" placeholder="gênero...">
+                <input type="text" id="genero" name="genero" placeholder="gênero...">
             </div>
             <div class="campo">
                 <label for="ano">Ano:</label>
-                <input type="number" id="ano" placeholder="ano...">
+                <input type="number" id="ano" name="ano" placeholder="ano...">
             </div>
             <div class="campo campo-largo">
                 <label for="sinopse">Sinopse:</label>
-                <textarea id="sinopse" rows="4" placeholder="sinopse..."></textarea>
+                <textarea id="sinopse" name="sinopse" rows="4" placeholder="sinopse..."></textarea>
             </div>
         </div>
         <div class="form-acoes">
-            <button class="btn" id="enviar">Enviar</button>
+            <button type="submit" class="btn" id="enviar">Enviar</button>
         </div>
+        </form>
     </main>
 
     <script src="../js/filme_novo.js"></script>

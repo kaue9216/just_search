@@ -21,36 +21,38 @@
         <h2>Altere o livro:</h2>
         <input type="hidden" id="id">
 
+        <form id="form">
         <div class="campos">
             <div class="campo">
                 <label for="titulo">Título:</label>
-                <input type="text" id="titulo" placeholder="título...">
+                <input type="text" id="titulo" name="titulo" placeholder="título...">
             </div>
             <div class="campo">
                 <label for="autor">Autor:</label>
-                <input type="text" id="autor" placeholder="autor...">
+                <input type="text" id="autor" name="autor" placeholder="autor...">
             </div>
             <div class="campo">
                 <label for="editora">Editora:</label>
-                <input type="text" id="editora" placeholder="editora...">
+                <input type="text" id="editora" name="editora" placeholder="editora...">
             </div>
             <div class="campo">
                 <label for="ano">Ano:</label>
-                <input type="number" id="ano" placeholder="ano...">
+                <input type="number" id="ano" name="ano" placeholder="ano...">
             </div>
             <div class="campo">
                 <label for="genero">Gênero:</label>
-                <input type="text" id="genero" placeholder="gênero...">
+                <input type="text" id="genero" name="genero" placeholder="gênero...">
             </div>
             <div class="campo">
                 <label for="numero_paginas">Páginas:</label>
-                <input type="number" id="numero_paginas" placeholder="páginas...">
+                <input type="number" id="numero_paginas" name="numero_paginas" placeholder="páginas...">
             </div>
         </div>
 
         <div class="form-acoes">
-            <button class="btn" id="enviar">Enviar</button>
+            <button type="submit" class="btn" id="enviar">Enviar</button>
         </div>
+        </form>
     </main>
 
     <script src="../js/livro_alterar.js"></script>
