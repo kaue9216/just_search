@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filmes</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="topo">
+        <a class="logo" href="index_filmes.html">
+            <span class="logo-marca">JS</span>
+            <span class="logo-nome">JustSearch</span>
+        </a>
+        <nav class="menu">
+            <a class="btn btn-secundario" href="../index.html">Início</a>
+        </nav>
+    </header>
+
+    <nav class="nav-modulos">
+        <a class="btn btn-secundario" href="index.html">Artigos</a>
+        <a class="btn btn-secundario" href="index_games.html">Games</a>
+        <a class="btn btn-secundario" href="index_livros.html">Livros</a>
+        <a class="btn" href="index_filmes.html">Filmes</a>
+        <a class="btn btn-secundario" href="index_series.html">Séries</a>
+    </nav>
+
+    <main class="layout">
+        <aside class="lateral">
+            <h2>Gêneros mais cadastrados:</h2>
+            <ul id="generos"></ul>
+        </aside>
+
+        <section class="conteudo">
+            <div class="busca">
+                <input type="text" id="busca" placeholder="Pesquisar por título, diretor ou gênero">
+                <button id="btn_busca" aria-label="Pesquisar">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="10.5" cy="10.5" r="7"></circle>
+                        <line x1="15.5" y1="15.5" x2="22" y2="22"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="lista-topo">
+                <h2>Resultados:</h2>
+                <button class="btn" id="novo">Novo Filme</button>
+            </div>
+            <div id="lista"></div>
+        </section>
+    </main>
+
+    <script src="../js/index_filmes.js"></script>
+</body>
+</html>

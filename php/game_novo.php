@@ -7,9 +7,20 @@ $retorno = [
     'data'     => []
 ];
 
-$titulo   = $_POST['titulo'];
-$conteudo = $_POST['conteudo'];
-$autor    = $_POST['autor'];
+$titulo   = ($_POST['titulo'] ?? '');
+$conteudo = ($_POST['conteudo'] ?? '');
+$autor    = ($_POST['autor'] ?? '');
+
+// Não permite cadastrar com campos vazios
+if(trim($titulo) == '' || trim($conteudo) == '' || trim($autor) == ''){
+    header("Content-type:application/json;charset=utf-8");
+    echo json_encode([
+        'status'   => 'nok',
+        'mensagem' => 'Preencha todos os campos.',
+        'data'     => []
+    ]);
+    exit;
+}
 
 $stmt = $conexao->prepare("INSERT INTO games (titulo, conteudo, autor) VALUES (?, ?, ?)");
 $stmt->bind_param("sss", $titulo, $conteudo, $autor);

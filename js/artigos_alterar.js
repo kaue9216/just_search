@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    valida_sessao();
     const url = new URLSearchParams(window.location.search);
     const id = url.get("id");
     buscar(id);
@@ -9,7 +8,6 @@ async function buscar(id) {
     const retorno = await fetch("../php/artigo_get.php?id=" + id);
     const resposta = await retorno.json();
     if (resposta.status == "ok") {
-        alert("SUCESSO:" + resposta.mensagem);
         var registro = resposta.data[0];
         document.getElementById("titulo").value = registro.titulo;
         document.getElementById("conteudo").value = registro.conteudo;
@@ -17,7 +15,7 @@ async function buscar(id) {
         document.getElementById("id").value = id;
     } else {
         alert("ERRO:" + resposta.mensagem);
-        window.location.href = "../home/";
+        window.location.href = "index.html";
     }
 }
 
@@ -36,15 +34,14 @@ async function alterar() {
     fd.append("conteudo", conteudo);
     fd.append("autor", autor);
 
-    const retorno = await fetch("../php/artigo_alterar.php?id=" + id,
-        {
-            method: 'POST',
-            body: fd
-        });
+    const retorno = await fetch("../php/artigo_alterar.php?id=" + id, {
+        method: 'POST',
+        body: fd
+    });
     const resposta = await retorno.json();
     if (resposta.status == "ok") {
         alert("SUCESSO: " + resposta.mensagem);
-        window.location.href = '../home/';
+        window.location.href = 'index.html';
     } else {
         alert("ERRO: " + resposta.mensagem);
     }

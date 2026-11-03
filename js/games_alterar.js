@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    valida_sessao();
     const url = new URLSearchParams(window.location.search);
     const id = url.get("id");
     buscar(id);
@@ -16,7 +15,7 @@ async function buscar(id) {
         document.getElementById("id").value = id;
     } else {
         alert("ERRO:" + resposta.mensagem);
-        window.location.href = "../games/index_games.html";
+        window.location.href = "index_games.html";
     }
 }
 
@@ -42,7 +41,7 @@ async function alterar() {
     const resposta = await retorno.json();
     if (resposta.status == "ok") {
         alert("SUCESSO: " + resposta.mensagem);
-        window.location.href = '../games/index_games.html';
+        window.location.href = 'index_games.html';
     } else {
         alert("ERRO: " + resposta.mensagem);
     }

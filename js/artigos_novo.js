@@ -1,7 +1,3 @@
-document.addEventListener("DOMContentLoaded", () => {
-    valida_sessao();
-});
-
 document.getElementById("enviar").addEventListener("click", () => {
     novo();
 });
@@ -16,22 +12,15 @@ async function novo() {
     fd.append("conteudo", conteudo);
     fd.append("autor", autor);
 
-    const retorno = await fetch("../php/artigo_novo.php",
-        {
-            method: 'POST',
-            body: fd
-        });
+    const retorno = await fetch("../php/artigo_novo.php", {
+        method: 'POST',
+        body: fd
+    });
     const resposta = await retorno.json();
     if (resposta.status == "ok") {
         alert("SUCESSO: " + resposta.mensagem);
-        window.location.href = "../home/";
+        window.location.href = "index.html";
     } else {
         alert("ERRO: " + resposta.mensagem);
     }
 }
-
-
-
-
-
-

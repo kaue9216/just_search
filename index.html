@@ -7,31 +7,27 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="app-container">
-        <header class="brand-header">
-            <div class="logo-box logo-large">
-                <span class="logo-badge">JS</span>
-                <span class="logo-text">JustSearch</span>
-            </div>
-        </header>
+    <header class="topo">
+        <span class="logo">
+            <span class="logo-marca">JS</span>
+            <span class="logo-nome">JustSearch</span>
+        </span>
+        <nav class="menu">
+            <a class="btn btn-secundario" href="login/">Login</a>
+        </nav>
+    </header>
 
-        <main class="main-card">
-            <h1 class="page-title">Selecione o Módulo de Gerenciamento</h1>
-            <hr class="divider">
+    <main class="painel">
+        <h1>Selecione o Módulo de Gerenciamento</h1>
+        <h2>Escolha o que deseja gerenciar</h2>
 
-            <div class="home-grid">
-                <a class="home-card" href="home/index.html">Artigos<small>Gerenciar artigos</small></a>
-                <a class="home-card" href="games/index_games.html">Games<small>Gerenciar games</small></a>
-                <a class="home-card" href="livros/index_livros.html">Livros<small>Gerenciar livros</small></a>
-                <a class="home-card" href="filmes/index_filmes.html">Filmes<small>Gerenciar filmes</small></a>
-                <a class="home-card" href="series/index_series.html">Séries<small>Gerenciar séries</small></a>
-            </div>
-
-            <hr class="divider">
-            <div class="module-nav">
-                <button class="btn" onclick="window.location.href='login/'">Login</button>
-            </div>
-        </main>
-    </div>
+        <div class="modulos">
+            <a class="btn" href="home/index.html">Artigos</a>
+            <a class="btn" href="home/index_games.html">Games</a>
+            <a class="btn" href="home/index_livros.html">Livros</a>
+            <a class="btn" href="home/index_filmes.html">Filmes</a>
+            <a class="btn" href="home/index_series.html">Séries</a>
+        </div>
+    </main>
 </body>
 </html>

@@ -7,41 +7,49 @@
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-    <div class="app-container">
-        <header class="brand-header">
-            <div class="logo-box">
-                <span class="logo-badge">JS</span>
-                <span class="logo-text">JustSearch</span>
+    <header class="topo">
+        <a class="logo" href="../index.html">
+            <span class="logo-marca">JS</span>
+            <span class="logo-nome">JustSearch</span>
+        </a>
+        <nav class="menu">
+            <a class="btn btn-secundario" href="../index.html">Início</a>
+        </nav>
+    </header>
+
+    <nav class="nav-modulos">
+        <a class="btn" href="index.html">Artigos</a>
+        <a class="btn btn-secundario" href="index_games.html">Games</a>
+        <a class="btn btn-secundario" href="index_livros.html">Livros</a>
+        <a class="btn btn-secundario" href="index_filmes.html">Filmes</a>
+        <a class="btn btn-secundario" href="index_series.html">Séries</a>
+    </nav>
+
+    <main class="layout">
+        <aside class="lateral">
+            <h2>Autores mais cadastrados:</h2>
+            <ul id="generos"></ul>
+        </aside>
+
+        <section class="conteudo">
+            <div class="busca">
+                <input type="text" id="busca" placeholder="Pesquisar por título, conteúdo ou autor">
+                <button id="btn_busca" aria-label="Pesquisar">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="10.5" cy="10.5" r="7"></circle>
+                        <line x1="15.5" y1="15.5" x2="22" y2="22"></line>
+                    </svg>
+                </button>
             </div>
-        </header>
 
-        <main class="main-card">
-            <h1 class="page-title">Gerenciamento de Artigos</h1>
-            <hr class="divider">
-
-            <div class="module-nav">
-                <button class="btn nav-btn" onclick="window.location.href='../index.html'">Início</button>
-                <button class="btn nav-btn active" onclick="window.location.href='../home/index.html'">Artigos</button>
-                <button class="btn nav-btn" onclick="window.location.href='../games/index_games.html'">Games</button>
-                <button class="btn nav-btn" onclick="window.location.href='../livros/index_livros.html'">Livros</button>
-                <button class="btn nav-btn" onclick="window.location.href='../filmes/index_filmes.html'">Filmes</button>
-                <button class="btn nav-btn" onclick="window.location.href='../series/index_series.html'">Séries</button>
+            <div class="lista-topo">
+                <h2>Resultados:</h2>
+                <button class="btn" id="novo">Novo Artigo</button>
             </div>
+            <div id="lista"></div>
+        </section>
+    </main>
 
-            <hr class="divider">
-
-            <div class="toolbar">
-                <button id="novo" class="btn btn-primary">Novo Registro</button>
-                <button id="logoff" class="btn btn-danger">Logoff</button>
-            </div>
-
-            <div id="lista" class="table-wrapper">
-                <!-- Tabela dinâmica inserida via JS -->
-            </div>
-        </main>
-    </div>
-
-    <script src="../js/valida_sessao.js"></script>
     <script src="../js/index.js"></script>
 </body>
 </html>

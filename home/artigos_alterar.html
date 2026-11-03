@@ -3,46 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Artigo ALTERAR - JustSearch</title>
+    <title>Artigo ALTERAR</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-    <div class="app-container">
-        <header class="brand-header">
-            <div class="logo-box">
-                <span class="logo-badge">JS</span>
-                <span class="logo-text">JustSearch</span>
+    <header class="topo">
+        <a class="logo" href="index.html">
+            <span class="logo-marca">JS</span>
+            <span class="logo-nome">JustSearch</span>
+        </a>
+        <nav class="menu">
+            <a class="btn btn-secundario" href="index.html">Voltar</a>
+        </nav>
+    </header>
+
+    <main class="formulario formulario-estreito">
+        <h2>Altere o artigo:</h2>
+        <input type="hidden" id="id">
+        <div class="campos">
+            <div class="campo">
+                <label for="titulo">Título:</label>
+                <input type="text" id="titulo" placeholder="título...">
             </div>
-        </header>
-
-        <main class="main-card form-card">
-            <h2 class="card-header-title">Alterar Artigo</h2>
-
-            <div class="form-group">
-                <label for="titulo">Título</label>
-                <input type="text" id="titulo" class="form-control" placeholder="título. . .">
+            <div class="campo campo-largo">
+                <label for="conteudo">Conteúdo:</label>
+                <textarea id="conteudo" rows="4" placeholder="conteúdo..."></textarea>
             </div>
-
-            <div class="form-group">
-                <label for="conteudo">Conteúdo</label>
-                <textarea id="conteudo" class="form-control" placeholder="conteúdo. . ."></textarea>
+            <div class="campo">
+                <label for="autor">Autor:</label>
+                <input type="text" id="autor" placeholder="autor...">
             </div>
+        </div>
+        <div class="form-acoes">
+            <button class="btn" id="enviar">Enviar</button>
+        </div>
+    </main>
 
-            <div class="form-group">
-                <label for="autor">Autor</label>
-                <input type="text" id="autor" class="form-control" placeholder="autor. . .">
-            </div>
-
-            <input type="hidden" id="id">
-
-            <div class="form-actions">
-                <button id="enviar" class="btn btn-primary">Enviar</button>
-                <button type="button" class="btn btn-secondary" onclick="window.location.href='index.html'">Voltar</button>
-            </div>
-        </main>
-    </div>
-
-    <script src="../js/valida_sessao.js"></script>
     <script src="../js/artigos_alterar.js"></script>
 </body>
 </html>

@@ -1,5 +1,8 @@
+// Lista com pesquisa e barra lateral de autores (mesmo molde de filmes).
+// A pesquisa filtra os registros já carregados, sem nova chamada ao PHP.
+var registros = [];
+
 document.addEventListener("DOMContentLoaded", () => {
-    valida_sessao();
     buscar();
 });
 
@@ -7,35 +10,51 @@ document.getElementById("novo").addEventListener("click", () => {
     window.location.href = 'artigos_novo.html';
 });
 
-document.getElementById("logoff").addEventListener("click", () => {
-    logoff();
+// Pesquisa: clique na lupa ou Enter no campo
+document.getElementById("btn_busca").addEventListener("click", () => {
+    filtrar(document.getElementById("busca").value);
 });
 
-async function logoff() {
-    const retorno = await fetch("../php/cliente_logoff.php");
-    const resposta = await retorno.json();
-    if (resposta.status == "ok") {
-        window.location.href = '../login/';
+document.getElementById("busca").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+        filtrar(document.getElementById("busca").value);
     }
-}
+});
 
 async function buscar() {
     try {
         const retorno = await fetch("../php/artigo_get.php");
         const resposta = await retorno.json();
         if (resposta.status == "ok") {
-            preencherTabela(resposta.data);
+            registros = resposta.data;
+            preencherLista(registros);
+            preencherCategorias(registros);
         } else {
-            document.getElementById("lista").innerHTML = "<p class='empty-msg'>" + resposta.mensagem + "</p>";
+            document.getElementById("lista").innerHTML =
+                "<p class='vazio'>Nenhum artigo encontrado.</p>";
+            document.getElementById("generos").innerHTML = "";
         }
     } catch (erro) {
-        // Acontece quando o PHP não roda (página aberta sem Apache) ou devolve erro em vez de JSON
-        document.getElementById("lista").innerHTML = "<p class='empty-msg'>Erro ao buscar os dados. Verifique se o Apache/MySQL estão ligados, se a página foi aberta por http://localhost/... e se o banco.sql foi importado.</p>";
+        document.getElementById("lista").innerHTML =
+            "<p class='vazio'>Erro ao buscar os dados. Verifique o Apache/MySQL e se o banco.sql foi importado.</p>";
         console.error(erro);
     }
 }
 
+// Filtra a lista carregada pelo texto digitado
+function filtrar(termo) {
+    var t = termo.trim().toLowerCase();
+    var campos = ["titulo", "conteudo", "autor"];
+    var achados = registros.filter((r) =>
+        campos.some((c) => String(r[c] ?? "").toLowerCase().includes(t))
+    );
+    preencherLista(achados);
+}
+
 async function excluir(id) {
+    if (!confirm("Deseja realmente excluir este artigo?")) {
+        return;
+    }
     const retorno = await fetch("../php/artigo_excluir.php?id=" + id);
     const resposta = await retorno.json();
     if (resposta.status == "ok") {
@@ -46,31 +65,71 @@ async function excluir(id) {
     }
 }
 
-function preencherTabela(tabela) {
-    var html = `
-        <table>
-            <thead>
-                <tr>
-                    <th> Título </th>
-                    <th> Conteúdo </th>
-                    <th> Autor </th>
-                    <th> Ações </th>
-                </tr>
-            </thead>
-            <tbody>`;
-    for (var i = 0; i < tabela.length; i++) {
-        html += `
-            <tr>
-                <td>${tabela[i].titulo}</td>
-                <td>${tabela[i].conteudo}</td>
-                <td>${tabela[i].autor}</td>
-                <td>
-                    <a href='artigos_alterar.html?id=${tabela[i].id}' class='btn-action edit'>Alterar</a>
-                    <a href='#' onclick='excluir(${tabela[i].id})' class='btn-action delete'>Excluir</a>
-                </td>
-            </tr>
-        `;
+// Evita que textos do banco quebrem o HTML (proteção contra XSS)
+function escapar(texto) {
+    if (texto === null || texto === undefined) return "";
+    return String(texto)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+function preencherLista(tabela) {
+    if (tabela.length == 0) {
+        document.getElementById("lista").innerHTML =
+            "<p class='vazio'>Nenhum artigo encontrado.</p>";
+        return;
     }
-    html += '</tbody></table>';
+
+    var html = `<ul class="resultados">`;
+
+    for (var i = 0; i < tabela.length; i++) {
+        var r = tabela[i];
+        var extra = "";
+        var meta = escapar(r.autor);
+        var descricao = `<p>${escapar(r.conteudo)}</p>`;
+        html += `
+            <li class="resultado">
+                <div class="info">
+                    <h3>${escapar(r.titulo)}${extra}</h3>
+                    <span class="meta">${meta}</span>
+                    ${descricao}
+                    <div class="acoes">
+                        <a href='artigos_alterar.html?id=${r.id}'>Alterar</a>
+                        <a href='#' class="perigo" onclick='excluir(${r.id}); return false;'>Excluir</a>
+                    </div>
+                </div>
+            </li>`;
+    }
+
+    html += `</ul>`;
     document.getElementById("lista").innerHTML = html;
+}
+
+// Barra lateral: lista os autores cadastrados (mais frequentes primeiro)
+function preencherCategorias(tabela) {
+    var contagem = {};
+    for (var i = 0; i < tabela.length; i++) {
+        var c = tabela[i].autor;
+        contagem[c] = (contagem[c] || 0) + 1;
+    }
+    var itens = Object.keys(contagem).sort((a, b) => contagem[b] - contagem[a]);
+
+    var html = "";
+    for (var j = 0; j < itens.length; j++) {
+        html += `<li><a href="#" data-cat="${escapar(itens[j])}">${escapar(itens[j])}</a></li>`;
+    }
+    var lista = document.getElementById("generos");
+    lista.innerHTML = html;
+
+    lista.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", (e) => {
+            e.preventDefault();
+            var cat = link.getAttribute("data-cat");
+            document.getElementById("busca").value = cat;
+            filtrar(cat);
+        });
+    });
 }

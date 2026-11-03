@@ -38,14 +38,14 @@ Aplicação web com CRUDs armazenados em **MySQL**, acessados por um back-end **
 | CRUD | Tabela | Responsável | Situação |
 |---|---|---|---|
 | Artigos | `artigos` | _(preencher)_ | ✅ Completo (Create, Read, Update, Delete) |
-| Séries | _(a criar)_ | _(preencher)_ | ⏳ Só existe na RA1 (localStorage) |
-| Livros | _(a criar)_ | _(preencher)_ | ⏳ Só existe na RA1 |
-| Games | _(a criar)_ | _(preencher)_ | ⏳ Só existe na RA1 |
-| Filmes | _(a criar)_ | _(preencher)_ | ⏳ Só existe na RA1 |
+| Games | `games` | _(preencher)_ | ✅ Completo |
+| Livros | `livros` | _(preencher)_ | ✅ Completo |
+| Filmes | `filmes` | _(preencher)_ | ✅ Completo |
+| Séries | `series` | _(preencher)_ | ⏳ Tabela e telas HTML prontas; faltam `php/serie_*.php` e `js/index_series.js`, `serie_novo.js`, `serie_alterar.js` |
 
 A RA1 tinha 5 módulos, o que sugere um grupo de 5. **Confirmar o número de integrantes**, pois define o mínimo de CRUDs. Conferir também se essas tabelas batem com o modelo lógico da disciplina de Banco de Dados.
 
-Existe ainda um login/sessão (`cliente_login.php` etc.), seguindo o exemplo do professor. **Não é exigido pela atividade**; pode ficar como extra, mas não deve atrapalhar a demonstração dos CRUDs.
+Existe ainda um login/sessão (`cliente_login.php` etc.), seguindo o exemplo do professor. **Não é exigido pela atividade**: é só um extra, aberto pelo botão *Login* da página inicial. **Nenhum CRUD exige login** (as telas não checam sessão), para não atrapalhar a demonstração.
 
 ## Tecnologias
 
@@ -59,22 +59,21 @@ Existe ainda um login/sessão (`cliente_login.php` etc.), seguindo o exemplo do 
 
 ```
 just_search/
-├── index.html              # redireciona para login/
+├── index.html              # página inicial: navegação entre os módulos
 ├── banco.sql               # CREATE DATABASE/TABLE + registros de exemplo
+├── css/style.css           # estilo único do projeto
 ├── login/index.html        # login (extra, não exigido)
-├── home/
-│   ├── index.html          # lista de artigos
-│   ├── artigos_novo.html
-│   └── artigos_alterar.html
-├── js/
-│   ├── cliente_login.js, valida_sessao.js     # login/sessão (extra)
-│   ├── index.js            # listar, excluir, logoff
-│   ├── artigos_novo.js     # Create
-│   └── artigos_alterar.js  # Read por id + Update
+├── home/                   # TODAS as telas HTML (uma lista + novo + alterar por módulo)
+│   ├── index.html, artigos_novo.html, artigos_alterar.html        # artigos
+│   ├── index_games.html, games_novo.html, games_alterar.html      # games
+│   ├── index_livros.html, livro_novo.html, livro_alterar.html     # livros
+│   ├── index_filmes.html, filme_novo.html, filme_alterar.html     # filmes
+│   └── index_series.html, serie_novo.html, serie_alterar.html     # séries
+├── js/                     # um JS por tela (index*.js lista/exclui, *_novo.js, *_alterar.js)
 ├── php/
 │   ├── conexao.php         # único ponto de conexão
 │   ├── cliente_login.php, cliente_logoff.php, valida_sessao.php   # extra
-│   └── artigo_get.php | artigo_novo.php | artigo_alterar.php | artigo_excluir.php
+│   └── <entidade>_get | _novo | _alterar | _excluir.php           # um conjunto por módulo
 ├── .template-giulio/       # exemplo do professor (referência, não editar)
 └── .historico_ra1/         # entrega anterior em localStorage (só histórico)
 ```
@@ -84,14 +83,18 @@ just_search/
 1. Instale o **XAMPP** e inicie **Apache** e **MySQL**.
 2. Copie o projeto para `C:\xampp\htdocs\projeto`.
 3. Em `http://localhost/phpmyadmin`, aba *SQL*, execute [banco.sql](banco.sql).
-4. Confira [php/conexao.php](php/conexao.php). O padrão do XAMPP é usuário `root` e **senha vazia**; hoje o arquivo está com a senha `"root"`, o que falha em um XAMPP padrão. Ajuste.
-5. Abra `http://localhost/projeto/` (entrar com `admin` / `123`).
+4. Confira [php/conexao.php](php/conexao.php): o padrão do XAMPP é usuário `root` e **senha vazia** (é o que o arquivo usa).
+5. Abra `http://localhost/projeto/` (página inicial; o login `admin` / `123` é opcional).
 
 ## Banco de dados
 
 ```
 cliente (id PK, nome, email, usuario, senha, ativo, instagram)   -- só para o login extra
-artigos (id PK, titulo, conteudo, autor)                          -- CRUD atual
+artigos (id PK, titulo, conteudo, autor)
+games   (id PK, titulo, conteudo, autor)
+livros  (id PK, titulo, autor, editora, ano, genero, numero_paginas)
+filmes  (id PK, titulo, sinopse, diretor, genero, ano)
+series  (id PK, titulo, autor, categoria, ano)
 ```
 
 ## Fluxo e padrão de comunicação
@@ -112,16 +115,13 @@ Resposta de todo PHP: `{ "status": "ok" | "nok", "mensagem": "...", "data": [ ..
 
 **Já em conformidade:** estrutura de pastas; padrão JSON; `prepare`/`bind_param` em todos os SQL; `fetch` + `FormData`; `$_GET` para id e `$_POST` para dados; `conexao.php` único; `utf8mb4`; script SQL com registros de exemplo; sem `localStorage`; senha de banco não aparece no front.
 
-**A corrigir, em ordem de prioridade (impacto na nota):**
+**Corrigido nesta revisão:** `conexao.php` responde em JSON quando a conexão falha e usa `root`/senha vazia (padrão do XAMPP); validação com `?? ''` e `trim()` em todos os `*_novo.php` e `*_alterar.php` (campo vazio devolve `nok` antes do `prepare()`); `confirm()` antes de excluir; lista vazia mostra "Nenhum registro encontrado"; textos de HTML em `pt-BR`; CSS único; conteúdo em `<textarea>`; os CRUDs não dependem mais de login.
 
-1. **Faltam 4 CRUDs** (séries, livros, games, filmes), se o grupo tiver 5 integrantes. Cada um segue o molde de `artigos`: tabela no `banco.sql`, 4 arquivos PHP, 2 HTMLs, 2 JS, e uma entrada na listagem.
-2. **`conexao.php`:** o erro de conexão é impresso com `echo` (quebra o JSON); a apostila (seção 8.3) responde `nok` em JSON e dá `exit`. Corrigir a senha padrão também (item 4 de *Como rodar*).
-3. **Validação nos PHP:** `artigo_novo.php` e `artigo_alterar.php` usam `$_POST[...]` direto. A apostila ensina `$_POST['x'] ?? ''` e `empty()` com retorno `nok` antes do `prepare()` (Aula 9, Q4).
-4. **`confirm()` antes de excluir** (pedido no guia do professor, ausente em `js/index.js`).
-5. **Interface:** hoje não há CSS. Reaproveitar o **Bootstrap 5.3.8** da RA1, com navegação entre os CRUDs. `conteudo` deveria ser `<textarea>`.
-6. **Lista vazia:** `artigo_get.php` devolve `nok` e a tela fica em branco; exibir "Nenhum registro".
-7. `artigos_alterar.js` dá `alert("SUCESSO")` só ao carregar o registro (herdado do guia); remover.
-8. Menor: `lang="en"` nos HTMLs; `.gitignore`/`.gitattributes` vazios.
+**Pendente:**
+
+1. **Séries:** faltam `php/serie_get.php`, `serie_novo.php`, `serie_alterar.php`, `serie_excluir.php` e `js/index_series.js`, `serie_novo.js`, `serie_alterar.js`. Modelo: o CRUD de games (ou livros).
+2. **Integrantes:** preencher nomes e responsáveis por CRUD nas tabelas acima (exigido na entrega).
+3. **Teste final:** importar `banco.sql` em banco vazio e testar em outro navegador/janela anônima; mostrar o registro no phpMyAdmin após cada operação.
 
 **Melhorias fora do escopo da disciplina** (opcionais; a apostila admite senha em texto puro e SQL com `innerHTML`): endpoints sem checagem de sessão, `password_hash`, escape de HTML na listagem. Só vale mexer se sobrar tempo e se o grupo conseguir explicar.
 

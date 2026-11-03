@@ -3,44 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - JustSearch</title>
+    <title>Seja bem vindo!</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
-<body class="login-page">
-    <div class="app-container login-container">
-        <header class="login-logo">
-            <span class="logo-badge">JS</span>
-            <span class="logo-text">JustSearch</span>
-        </header>
+<body>
+    <header class="topo">
+        <span class="logo">
+            <span class="logo-marca">JS</span>
+            <span class="logo-nome">JustSearch</span>
+        </span>
+    </header>
 
-        <main class="main-card form-card login-card">
-            <h2 class="card-header-title">Acesse sua conta</h2>
-
-            <div class="form-group">
-                <label for="usuario">Usuário</label>
-                <input type="text" id="usuario" class="form-control" placeholder="usuário. . .">
+    <main class="formulario formulario-estreito">
+        <h2>Faça seu login:</h2>
+        <div class="campos">
+            <div class="campo">
+                <label for="usuario">Usuário:</label>
+                <input type="text" id="usuario" placeholder="usuário...">
             </div>
-
-            <div class="form-group">
-                <label for="senha">Senha</label>
-                <input type="password" id="senha" class="form-control" placeholder="senha. . .">
+            <div class="campo">
+                <label for="senha">Senha:</label>
+                <input type="password" id="senha" placeholder="senha...">
             </div>
-
-            <div class="form-actions">
-                <button id="enviar" class="btn btn-primary btn-block">Entrar</button>
-            </div>
-
-            <hr class="divider">
-            <button type="button" class="btn btn-secondary btn-block" onclick="window.location.href='../index.html'">Voltar ao início</button>
-        </main>
-    </div>
+        </div>
+        <div class="form-acoes">
+            <button class="btn" id="enviar">Enviar</button>
+        </div>
+    </main>
 
     <script src="../js/cliente_login.js"></script>
-    <script>
-        // Permite entrar apertando Enter em qualquer campo
-        document.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") { document.getElementById("enviar").click(); }
-        });
-    </script>
 </body>
 </html>

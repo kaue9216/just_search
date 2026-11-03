@@ -8,9 +8,20 @@ $retorno = [
 ];
 
 if(isset($_GET['id'])){
-    $titulo   = $_POST['titulo'];
-    $conteudo = $_POST['conteudo'];
-    $autor    = $_POST['autor'];
+    $titulo   = ($_POST['titulo'] ?? '');
+    $conteudo = ($_POST['conteudo'] ?? '');
+    $autor    = ($_POST['autor'] ?? '');
+
+    // Não permite cadastrar com campos vazios
+    if(trim($titulo) == '' || trim($conteudo) == '' || trim($autor) == ''){
+        header("Content-type:application/json;charset=utf-8");
+        echo json_encode([
+            'status'   => 'nok',
+            'mensagem' => 'Preencha todos os campos.',
+            'data'     => []
+        ]);
+        exit;
+    }
 
     $stmt = $conexao->prepare("UPDATE artigos SET titulo = ?, conteudo = ?, autor = ? WHERE id = ?");
     $stmt->bind_param("sssi", $titulo, $conteudo, $autor, $_GET['id']);

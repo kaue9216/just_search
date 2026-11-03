@@ -1,7 +1,3 @@
-document.addEventListener("DOMContentLoaded", () => {
-    valida_sessao();
-});
-
 document.getElementById("enviar").addEventListener("click", () => {
     novo();
 });
@@ -23,7 +19,7 @@ async function novo() {
     const resposta = await retorno.json();
     if (resposta.status == "ok") {
         alert("SUCESSO: " + resposta.mensagem);
-        window.location.href = "../games/index_games.html";
+        window.location.href = "index_games.html";
     } else {
         alert("ERRO: " + resposta.mensagem);
     }
