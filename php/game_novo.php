@@ -1,48 +1,43 @@
 <?php
-include_once('conexao.php');
+    include_once('conexao.php');
+    $retorno = [
+        'status'    => '',
+        'mensagem'  => '',
+        'data'      => []
+    ];
 
-$retorno = [
-    'status'   => '',
-    'mensagem' => '',
-    'data'     => []
-];
+    $titulo = $_POST['titulo'];
+    $conteudo = $_POST['conteudo'];
+    $autor = $_POST['autor'];
 
-$titulo   = ($_POST['titulo'] ?? '');
-$conteudo = ($_POST['conteudo'] ?? '');
-$autor    = ($_POST['autor'] ?? '');
+    if ($titulo == '' || $conteudo == '' || $autor == '') {
+        $retorno = [
+            'status'    => 'nok',
+            'mensagem'  => 'Preencha todos os campos.',
+            'data'      => []
+        ];
+    } else {
+        $stmt = $conexao->prepare("INSERT INTO games(titulo, conteudo, autor) VALUES(?, ?, ?)");
+        $stmt->bind_param("sss", $titulo, $conteudo, $autor);
+        $stmt->execute();
 
-// Não permite cadastrar com campos vazios
-if(trim($titulo) == '' || trim($conteudo) == '' || trim($autor) == ''){
+        if ($stmt->affected_rows > 0) {
+            $retorno = [
+                'status'    => 'ok',
+                'mensagem'  => 'registro inserido com sucesso',
+                'data'      => []
+            ];
+        } else {
+            $retorno = [
+                'status'    => 'nok',
+                'mensagem'  => 'falha ao inserir o registro',
+                'data'      => []
+            ];
+        }
+        $stmt->close();
+    }
+
+    $conexao->close();
+
     header("Content-type:application/json;charset=utf-8");
-    echo json_encode([
-        'status'   => 'nok',
-        'mensagem' => 'Preencha todos os campos.',
-        'data'     => []
-    ]);
-    exit;
-}
-
-$stmt = $conexao->prepare("INSERT INTO games (titulo, conteudo, autor) VALUES (?, ?, ?)");
-$stmt->bind_param("sss", $titulo, $conteudo, $autor);
-$stmt->execute();
-
-if($stmt->affected_rows > 0){
-    $retorno = [
-        'status'   => 'ok',
-        'mensagem' => 'registro inserido com sucesso',
-        'data'     => []
-    ];
-}else{
-    $retorno = [
-        'status'   => 'nok',
-        'mensagem' => 'falha ao inserir o registro',
-        'data'     => []
-    ];
-}
-
-$stmt->close();
-$conexao->close();
-
-header("Content-type:application/json;charset=utf-8");
-echo json_encode($retorno);
-?>
+    echo json_encode($retorno);

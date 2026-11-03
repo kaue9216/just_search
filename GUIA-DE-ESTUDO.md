@@ -25,7 +25,7 @@ Este guia explica **o que é o projeto, o que o grupo precisa entregar, como o c
 
 ## 1. O projeto em uma página
 
-**JustSearch** é uma aplicação web para cadastrar conteúdos (hoje: **artigos**; a primeira versão do trabalho também tinha séries, livros, games e filmes). Para cada tipo de conteúdo, o usuário consegue:
+**JustSearch** é uma aplicação web para cadastrar conteúdos (**artigos, games, livros, filmes e séries**, um CRUD para cada integrante). Para cada tipo de conteúdo, o usuário consegue:
 
 - **C**riar um registro (cadastrar);
 - **R**ler os registros (listar);
@@ -73,12 +73,12 @@ Sempre que possível, o CRUD deve ser de uma **tabela real do modelo lógico** q
 | 3 | **Não usar `localStorage`** | (era da RA1; agora proibido) |
 | 4 | Estrutura FRONT > BACK > BANCO (JS nunca acessa o banco) | `js/` → `php/` → MySQL |
 | 5 | Conexão em **um único arquivo** `conexao.php` | [php/conexao.php](php/conexao.php) |
-| 6 | **Prepared statements** (`prepare` + `bind_param`) em tudo que recebe dado do usuário | todos os `php/artigo_*.php` |
+| 6 | **Prepared statements** (`prepare` + `bind_param`) em tudo que recebe dado do usuário | todos os `php/<coisa>_*.php` |
 | 7 | Resposta **sempre em JSON** no padrão `status` / `mensagem` / `data` | todos os PHP |
 | 8 | Front com `fetch()`, `FormData` e `resposta.json()` | arquivos de `js/` |
 | 9 | Ler dados com `$_POST` e `$_GET` | PHP |
 | 10 | Arquivos organizados em pastas por função (html, js, php) | estrutura do projeto |
-| 11 | Interface organizada e agradável (Bootstrap opcional) | ⚠️ ainda sem CSS |
+| 11 | Interface organizada e agradável (Bootstrap opcional) | [css/style.css](css/style.css) |
 
 **Não é necessário:** login, sessão, CSS complexo, frameworks. O login que existe no projeto é um extra baseado no exemplo do professor.
 
@@ -126,10 +126,10 @@ O professor pode perguntar, por exemplo: *por que usar `prepare()` e `bind_param
 | Integrante | CRUD | Tabela | Situação |
 |---|---|---|---|
 | _(nome)_ | Artigos | `artigos` | ✅ Pronto |
-| _(nome)_ | Séries | _(criar)_ | ⏳ |
-| _(nome)_ | Livros | _(criar)_ | ⏳ |
-| _(nome)_ | Games | _(criar)_ | ⏳ |
-| _(nome)_ | Filmes | _(criar)_ | ⏳ |
+| _(nome)_ | Games | `games` | ✅ Pronto |
+| _(nome)_ | Livros | `livros` | ✅ Pronto |
+| _(nome)_ | Filmes | `filmes` | ✅ Pronto |
+| _(nome)_ | Séries | `series` | ✅ Pronto |
 
 ---
 
@@ -204,29 +204,32 @@ O banco trata o que foi digitado **só como dado**, nunca como comando.
 
 ```
 just_search/
-├── index.html                 Redireciona para login/
+├── index.html                 Página inicial (links para os módulos)
 ├── banco.sql                  Cria banco, tabelas e dados de exemplo
+├── css/style.css              Estilo único do projeto
 ├── login/
 │   └── index.html             Tela de login (extra)
-├── home/
-│   ├── index.html             Lista de artigos + botões "Novo" e "Logoff"
-│   ├── artigos_novo.html      Formulário de cadastro
-│   └── artigos_alterar.html   Formulário de edição
-├── js/
+├── home/                      TODAS as telas do projeto
+│   ├── index.html                 Lista de artigos
+│   ├── artigos_novo.html, artigos_alterar.html
+│   ├── index_games.html, games_novo.html, games_alterar.html
+│   ├── index_livros.html, livro_novo.html, livro_alterar.html
+│   ├── index_filmes.html, filme_novo.html, filme_alterar.html
+│   └── index_series.html, serie_novo.html, serie_alterar.html
+├── js/                        Um JS por tela (mesmo padrão em todos)
+│   ├── index.js, index_games.js, index_livros.js, index_filmes.js, index_series.js
+│   │                              Lista, pesquisa, categorias da lateral e exclusão
+│   ├── artigos_novo.js, games_novo.js, livro_novo.js, filme_novo.js, serie_novo.js
+│   ├── artigos_alterar.js, games_alterar.js, livro_alterar.js, filme_alterar.js, serie_alterar.js
 │   ├── cliente_login.js       Envia usuário/senha (extra)
-│   ├── valida_sessao.js       Confere se está logado (extra)
-│   ├── index.js               Lista, exclui e faz logoff
-│   ├── artigos_novo.js        Envia o novo artigo
-│   └── artigos_alterar.js     Carrega e altera um artigo
+│   └── valida_sessao.js       Confere se está logado (extra, as telas dos CRUDs não usam)
 ├── php/
 │   ├── conexao.php            Conecta no MySQL (usado por todos)
-│   ├── artigo_get.php         SELECT  (todos ou um)
-│   ├── artigo_novo.php        INSERT
-│   ├── artigo_alterar.php     UPDATE
-│   ├── artigo_excluir.php     DELETE
-│   ├── cliente_login.php      Confere usuário/senha, abre sessão (extra)
-│   ├── cliente_logoff.php     Encerra sessão (extra)
-│   └── valida_sessao.php      Diz se há sessão ativa (extra)
+│   ├── <coisa>_get.php        SELECT  (todos ou um)
+│   ├── <coisa>_novo.php       INSERT
+│   ├── <coisa>_alterar.php    UPDATE
+│   ├── <coisa>_excluir.php    DELETE        (<coisa> = artigo, game, livro, filme, serie)
+│   └── cliente_login.php, cliente_logoff.php, valida_sessao.php   (extras)
 ├── .template-giulio/          Exemplo do professor (só leitura)
 └── .historico_ra1/            Primeira entrega, com localStorage (só histórico)
 ```
@@ -268,12 +271,24 @@ CREATE TABLE IF NOT EXISTS artigos (
 
 `NOT NULL` = campo obrigatório no banco. `IF NOT EXISTS` evita erro se rodar o script de novo.
 
+### As outras tabelas
+
+Cada CRUD tem a sua tabela, com `id INT AUTO_INCREMENT PRIMARY KEY`:
+
+```
+artigos (id, titulo, conteudo, autor)
+games   (id, titulo, conteudo, autor)
+livros  (id, titulo, autor, editora, ano, genero, numero_paginas)
+filmes  (id, titulo, sinopse, diretor, genero, ano)      -- ano pode ficar vazio (NULL)
+series  (id, titulo, autor, categoria, ano)
+```
+
 ### Tabela `cliente` (só para o login extra)
 
 Tem `id, nome, email, usuario, senha, ativo, instagram`, e é a mesma tabela do exemplo do professor. É usada apenas para conferir usuário e senha.
 
 ### Dados de exemplo
-O script insere o usuário `admin` (senha `123`) e 3 artigos. A entrega **exige** registros de exemplo no `.sql`.
+O script insere o usuário `admin` (senha `123`) e registros de exemplo em cada tabela. A entrega **exige** registros de exemplo no `.sql`.
 
 ### Dica para o seu CRUD
 Seu `CREATE TABLE` entra neste mesmo `banco.sql`, **junto com alguns `INSERT` de exemplo**. Lembre que o script precisa rodar em um banco vazio sem erros.
@@ -301,20 +316,20 @@ echo json_encode($retorno);                        // 7. envia a resposta
 ### 6.1 [php/conexao.php](php/conexao.php): a conexão com o banco
 
 ```php
-$servidor   = "localhost";
+$servidor   = "localhost:3306";
 $usuario    = "root";
-$senha      = "root";      // ⚠️ no XAMPP padrão a senha é vazia ("")
+$senha      = "";            // no XAMPP padrão a senha é vazia
 $nome_banco = "projeto";
 
 $conexao = new mysqli($servidor, $usuario, $senha, $nome_banco);
 if($conexao->connect_error){
-    echo $conexao->connect_error;     // ⚠️ ver seção 11
+    echo $conexao->connect_error;
 }
-$conexao->set_charset("utf8mb4");
+$conexao->set_charset("utf8mb4");   // faz os acentos funcionarem
 ```
 - Cria o objeto `$conexao` com o **host, usuário, senha e nome do banco**.
 - É um **arquivo único** de propósito: se mudar a senha, muda num lugar só. Os outros PHP fazem `include_once('conexao.php')`.
-- `set_charset("utf8mb4")` faz acentos funcionarem.
+- A única diferença para o arquivo do professor é a linha do `set_charset`; sem ela os acentos podem quebrar o JSON.
 - A senha do banco fica **só no PHP**, que o usuário não consegue ler. Esse é um dos itens de segurança avaliados.
 
 ### 6.2 [php/artigo_get.php](php/artigo_get.php): **R**ead (listar ou buscar um)
@@ -354,16 +369,24 @@ $titulo   = $_POST['titulo'];
 $conteudo = $_POST['conteudo'];
 $autor    = $_POST['autor'];
 
-$stmt = $conexao->prepare("INSERT INTO artigos (titulo, conteudo, autor) VALUES (?, ?, ?)");
-$stmt->bind_param("sss", $titulo, $conteudo, $autor);
-$stmt->execute();
+// Não deixa cadastrar com campo vazio
+if($titulo == '' || $conteudo == '' || $autor == ''){
+    /* nok: 'Preencha todos os campos.' */
+}else{
+    $stmt = $conexao->prepare("INSERT INTO artigos(titulo, conteudo, autor) VALUES(?, ?, ?)");
+    $stmt->bind_param("sss", $titulo, $conteudo, $autor);
+    $stmt->execute();
 
-if($stmt->affected_rows > 0){ /* ok: 'registro inserido com sucesso' */ }
-else                         { /* nok: 'falha ao inserir o registro' */ }
+    if($stmt->affected_rows > 0){ /* ok: 'registro inserido com sucesso' */ }
+    else                         { /* nok: 'falha ao inserir o registro' */ }
+    $stmt->close();
+}
 ```
 - Os dados vêm do `FormData` do JS e chegam em `$_POST`.
+- O `if` do começo recusa o cadastro com campo vazio, **antes** de chegar no banco. No exemplo do professor essa checagem não existe; ela foi acrescentada porque sem ela dava para cadastrar registro em branco.
 - Três `?` → três valores → `"sss"` (três textos).
 - `affected_rows` = quantas linhas o comando afetou. Se for **maior que 0**, a linha foi inserida.
+- Em livros e séries há mais uma checagem: `else if(!is_numeric($ano))` recusa texto no campo ano. No filme o ano é opcional: se vier vazio, o PHP grava `NULL`.
 
 ### 6.4 [php/artigo_alterar.php](php/artigo_alterar.php): **U**pdate
 
@@ -371,13 +394,18 @@ else                         { /* nok: 'falha ao inserir o registro' */ }
 if(isset($_GET['id'])){
     $titulo = $_POST['titulo']; $conteudo = $_POST['conteudo']; $autor = $_POST['autor'];
 
-    $stmt = $conexao->prepare("UPDATE artigos SET titulo = ?, conteudo = ?, autor = ? WHERE id = ?");
-    $stmt->bind_param("sssi", $titulo, $conteudo, $autor, $_GET['id']);
-    $stmt->execute();
+    if($titulo == '' || $conteudo == '' || $autor == ''){
+        /* nok: 'Preencha todos os campos.' */
+    }else{
+        $stmt = $conexao->prepare("UPDATE artigos SET titulo = ?, conteudo = ?, autor = ? WHERE id = ?");
+        $stmt->bind_param("sssi", $titulo, $conteudo, $autor, $_GET['id']);
+        $stmt->execute();
 
-    if($stmt->affected_rows > 0)       { /* ok: 'Registro alterado com sucesso.' */ }
-    else if($stmt->affected_rows == 0) { /* ok: 'Nenhum dado foi alterado.' */ }
-    else                               { /* nok: 'Falha ao alterar o registro.' */ }
+        if($stmt->affected_rows > 0)       { /* ok: 'Registro alterado com sucesso.' */ }
+        else if($stmt->affected_rows == 0) { /* ok: 'Nenhum dado foi alterado.' */ }
+        else                               { /* nok: 'Falha ao alterar o registro.' */ }
+        $stmt->close();
+    }
 }else{
     /* nok: 'Não posso alterar um registro sem um ID informado.' */
 }
@@ -421,52 +449,78 @@ Também usa só o `id` pela URL. ⚠️ Assim como no UPDATE, o `WHERE id = ?` �
 Cada página HTML tem os campos (`<input id="titulo">`) e carrega seu JS no fim:
 ```html
 <script src="../js/artigos_novo.js"></script>
-<script src="../js/valida_sessao.js"></script>
 ```
 O JS encontra os campos pelo `id` com `document.getElementById("titulo")`. **O `id` no HTML e o nome usado no JS precisam ser idênticos.** O caminho `../js/` sobe uma pasta (de `home/` para a raiz) e entra em `js/`.
 
 ### 7.2 [home/index.html](home/index.html) + [js/index.js](js/index.js): a lista
 
-O HTML tem os botões `#novo` e `#logoff` e uma `<div id="lista">` vazia. Quem preenche é o JS:
+O HTML tem o botão `#novo`, o campo de pesquisa `#busca` com a lupa `#btn_busca`, a lateral `<ul id="generos">` e uma `<div id="lista">` vazia. Quem preenche é o JS:
 
 ```js
-document.addEventListener("DOMContentLoaded", () => {   // quando a página termina de carregar
-    valida_sessao();    // (extra) confere login
-    buscar();           // carrega a lista
+var registros = [];                                    // guarda o que veio do PHP
+
+document.addEventListener("DOMContentLoaded", () => {  // quando a página termina de carregar
+    buscar();
 });
 
-async function buscar() {
+async function buscar(){
     const retorno  = await fetch("../php/artigo_get.php");   // pede ao PHP
     const resposta = await retorno.json();                   // converte JSON → objeto JS
-    if (resposta.status == "ok") {
-        preencherTabela(resposta.data);                      // desenha a tabela
+    if(resposta.status == "ok"){
+        registros = resposta.data;
+        preencherLista(registros);                           // desenha a lista
+        preencherCategorias(registros);                      // desenha a lateral
+    }else{
+        document.getElementById("lista").innerHTML = "<p class='vazio'>Nenhum artigo encontrado.</p>";
     }
 }
 ```
-`preencherTabela` monta um texto HTML com um `for` (uma `<tr>` por artigo) e joga na `<div id="lista">` com `innerHTML`. Cada linha tem dois links:
+`preencherLista` monta um texto HTML com um `for` (um `<li>` por registro) e joga na `<div id="lista">` com `innerHTML`. Cada item tem dois links:
 ```html
-<a href='artigos_alterar.html?id=${tabela[i].id}'>Alterar</a>
-<a href='#' onclick='excluir(${tabela[i].id})'>Excluir</a>
+<a href="artigos_alterar.html?id=${tabela[i].id}">Alterar</a>
+<a href="#" class="perigo" onclick="excluir(${tabela[i].id})">Excluir</a>
 ```
 - **Alterar** leva para a outra página **passando o id na URL**.
-- **Excluir** chama a função `excluir(id)`:
+- **Excluir** chama a função `excluir(id)`, que pede confirmação antes:
 
 ```js
-async function excluir(id) {
+async function excluir(id){
+    if(confirm("Deseja realmente excluir este artigo?") == false){
+        return;                                              // desistiu: não faz nada
+    }
     const retorno  = await fetch("../php/artigo_excluir.php?id=" + id);
     const resposta = await retorno.json();
     alert(resposta.mensagem);
-    if (resposta.status == "ok") window.location.reload();   // recarrega p/ atualizar a lista
+    if(resposta.status == "ok"){
+        window.location.reload();                            // recarrega p/ atualizar a lista
+    }
 }
 ```
-⚠️ Falta um `confirm("Tem certeza?")` antes de excluir (o guia do professor pede isso).
+
+**Pesquisa e lateral (a única parte que o exemplo do professor não tem).** A pesquisa **não chama o PHP de novo**: ela filtra o array `registros`, que já está na memória.
+
+```js
+function filtrar(){
+    var termo = document.getElementById("busca").value.toLowerCase();
+    var achados = [];                                        // lista vazia dos que combinam
+    for(var i=0;i<registros.length;i++){
+        var texto = (registros[i].titulo + " " + registros[i].conteudo + " " + registros[i].autor).toLowerCase();
+        if(texto.indexOf(termo) != -1){                      // -1 = "não achou"
+            achados.push(registros[i]);                      // põe na lista dos achados
+        }
+    }
+    preencherLista(achados);                                 // desenha só os achados
+}
+```
+- A lupa (`#btn_busca`) chama `filtrar()` no clique.
+- `preencherCategorias` percorre os registros com um `for` e guarda cada valor (autor, gênero ou categoria) **uma vez só**, usando `indexOf` para ver se já está na lista. Cada item da lateral tem `onclick="categoria('valor')"`, que escreve o valor no campo de busca e chama `filtrar()`.
 
 ### 7.3 [home/artigos_novo.html](home/artigos_novo.html) + [js/artigos_novo.js](js/artigos_novo.js): cadastrar
 
 ```js
 document.getElementById("enviar").addEventListener("click", () => { novo(); });
 
-async function novo() {
+async function novo(){
     var titulo   = document.getElementById("titulo").value;     // lê o que foi digitado
     var conteudo = document.getElementById("conteudo").value;
     var autor    = document.getElementById("autor").value;
@@ -476,17 +530,19 @@ async function novo() {
     fd.append("conteudo", conteudo);
     fd.append("autor", autor);
 
-    const retorno = await fetch("../php/artigo_novo.php", { method: 'POST', body: fd });
+    const retorno = await fetch("../php/artigo_novo.php", { method: "POST", body: fd });
     const resposta = await retorno.json();
-    if (resposta.status == "ok") {
+    if(resposta.status == "ok"){
         alert("SUCESSO: " + resposta.mensagem);
-        window.location.href = "../home/";           // volta para a lista
-    } else {
+        window.location.href = "index.html";            // volta para a lista
+    }else{
         alert("ERRO: " + resposta.mensagem);
     }
 }
 ```
 **O nome passado em `fd.append("titulo", ...)` precisa ser exatamente o mesmo de `$_POST['titulo']` no PHP.** Se errar uma letra, o PHP não recebe o dado.
+
+O botão `Enviar` do HTML é `type="button"` (e não `submit`), para o clique não recarregar a página: quem trata o clique é o JS.
 
 ### 7.4 [home/artigos_alterar.html](home/artigos_alterar.html) + [js/artigos_alterar.js](js/artigos_alterar.js): alterar (duas fases)
 
@@ -495,42 +551,40 @@ O formulário de alteração tem um campo escondido que guarda o id: `<input typ
 **Fase 1: carregar o registro e preencher o formulário**
 ```js
 document.addEventListener("DOMContentLoaded", () => {
-    valida_sessao();
     const url = new URLSearchParams(window.location.search);  // lê "?id=3" da URL da página
     const id  = url.get("id");                                // → "3"
     buscar(id);
 });
 
-async function buscar(id) {
+async function buscar(id){
     const retorno  = await fetch("../php/artigo_get.php?id=" + id);   // GET com id
     const resposta = await retorno.json();
-    if (resposta.status == "ok") {
+    if(resposta.status == "ok"){
         var registro = resposta.data[0];                              // o único item da lista
         document.getElementById("titulo").value   = registro.titulo;  // preenche os campos
         document.getElementById("conteudo").value = registro.conteudo;
         document.getElementById("autor").value    = registro.autor;
         document.getElementById("id").value       = id;               // guarda no campo escondido
-    } else {
-        alert("ERRO:" + resposta.mensagem);
-        window.location.href = "../home/";
+    }else{
+        alert("ERRO: " + resposta.mensagem);
+        window.location.href = "index.html";
     }
 }
 ```
 **Fase 2: enviar a alteração**
 ```js
-async function alterar() {
+async function alterar(){
     /* lê titulo, conteudo, autor e id dos campos, monta o FormData com os 3 primeiros */
     const retorno = await fetch("../php/artigo_alterar.php?id=" + id,   // id na URL
-        { method: 'POST', body: fd });                                  // dados no corpo
-    /* se ok: alert + volta para ../home/ ; senão: alert de erro */
+        { method: "POST", body: fd });                                  // dados no corpo
+    /* se ok: alert + volta para a lista ; senão: alert de erro */
 }
 ```
-⚠️ Na fase 1 há um `alert("SUCESSO:...")` logo ao abrir a tela (herdado do exemplo do professor); atrapalha o uso e pode ser removido.
 
 ### 7.5 Login e sessão no front (extras)
 
 - [js/cliente_login.js](js/cliente_login.js): envia usuário e senha por `FormData` (POST) para `cliente_login.php`; se `ok`, vai para `../home/`; senão `alert("Credenciais invalidas.")`.
-- [js/valida_sessao.js](js/valida_sessao.js): pergunta ao `valida_sessao.php`; se vier `nok`, redireciona para `../login/`. É chamado no começo de toda página da área interna.
+- [js/valida_sessao.js](js/valida_sessao.js): pergunta ao `valida_sessao.php`; se vier `nok`, redireciona para `../login/`. É a função do exemplo do professor, mas as telas dos CRUDs **não a chamam**, porque a atividade não exige login.
 
 ---
 
@@ -563,7 +617,7 @@ Página home/index.html carrega (DOMContentLoaded)
         → prepare("SELECT * FROM artigos") + execute() + get_result()
         → while fetch_assoc() monta o array $tabela
         → $retorno = ok + data=$tabela → json_encode
-  → JS: resposta.data → preencherTabela() → monta o HTML → innerHTML na #lista
+  → JS: resposta.data → preencherLista() e preencherCategorias() → monta o HTML → innerHTML na #lista
 ```
 
 ### 8.3 Alterar (Update)
@@ -684,7 +738,7 @@ Copie `artigo_get.php`, `artigo_novo.php`, `artigo_alterar.php`, `artigo_excluir
 `filmes_novo.js` e `filmes_alterar.js`: troque os campos lidos (`getElementById`), os nomes do `fd.append` e as URLs do `fetch`.
 
 ### Passo 5: A lista
-Mostre a tabela de filmes (uma `<div id="lista">` + `buscar()` + `preencherTabela()`), com links Alterar/Excluir. Se tiver várias listas, cada CRUD terá sua página/JS de lista, ou uma navegação entre eles.
+Mostre a lista de filmes (uma `<div id="lista">` + `buscar()` + `preencherLista()`), com links Alterar/Excluir. Se tiver várias listas, cada CRUD terá sua página/JS de lista, ou uma navegação entre eles.
 
 ### Passo 6: Testar (nessa ordem)
 1. Importe o `.sql` num banco vazio. A tabela e o exemplo aparecem?
@@ -700,22 +754,20 @@ Mostre a tabela de filmes (uma `<div id="lista">` + `buscar()` + `preencherTabel
 
 ## 11. Problemas conhecidos neste código
 
-Pontos que a revisão encontrou, em ordem de importância para a nota. Conhecê-los ajuda a explicar e a corrigir:
+O código foi **simplificado de propósito** para usar só o que o professor ensinou (`var`, `function`, `for`, `fetch`, `FormData`, `if/else`). Por isso algumas proteções que existem em projetos reais ficaram de fora. Se o professor apontar alguma, é isto:
 
-| # | Problema | Onde | Por que importa / como corrigir |
+| # | Limitação | Onde | Por que ficou assim |
 |---|---|---|---|
-| 1 | Só existe 1 CRUD (artigos) | projeto | Precisa de 1 por integrante |
-| 2 | Senha do banco `"root"` | `conexao.php` | No XAMPP padrão a senha é vazia (`""`); com `"root"` a conexão falha. Ajuste conforme seu MySQL |
-| 3 | Erro de conexão sai com `echo` simples | `conexao.php` | Quebra o JSON. A apostila (8.3) responde um JSON `nok` e usa `exit` |
-| 4 | `$_POST[...]` usado sem validar | `artigo_novo.php`, `artigo_alterar.php` | A apostila ensina `$_POST['x'] ?? ''` e `empty()` para devolver `nok` com mensagem antes do `prepare()` |
-| 5 | Excluir sem pedir confirmação | `js/index.js` | O guia do professor pede `confirm()` |
-| 6 | Sem CSS | todos os HTML | Aplicar Bootstrap (como na RA1) e uma navegação entre os CRUDs |
-| 7 | Lista vazia fica em branco | `index.js` / `artigo_get.php` | Quando não há registros o PHP responde `nok` e o JS não mostra nada; mostrar "Nenhum registro" |
-| 8 | `alert("SUCESSO")` ao carregar a tela de alterar | `artigos_alterar.js` | Atrapalha o usuário; remover |
-| 9 | Campo `conteudo` é `<input>` | HTMLs | Para texto longo é melhor `<textarea>` |
-| 10 | `lang="en"` nos HTMLs | HTMLs | O conteúdo é português |
+| 1 | Texto vindo do banco entra na tela por `innerHTML` sem escape (risco de XSS) | `index*.js` | A apostila admite; escapar exigiria regex/`replace`, que não foi ensinado |
+| 2 | Sem `try/catch` no JS: se o servidor estiver desligado, o erro só aparece no console (F12) | todos os `js/` | O exemplo do professor também não tem |
+| 3 | Uma categoria com apóstrofo (ex.: `D'Artagnan`) quebra o clique **daquele item** da lateral | `preencherCategorias` | O valor vai dentro de `onclick="categoria('...')"`. A pesquisa pelo campo continua funcionando |
+| 4 | O Enter no campo de pesquisa não pesquisa, só o clique na lupa | `index*.js` | Exigiria `keydown` e `e.key`, que não foram ensinados |
+| 5 | Campo só com espaços passa na validação | `*_novo.php`, `*_alterar.php` | A checagem é `== ''`; sem `trim()`, para ficar igual ao nível da aula |
+| 6 | Se o front não enviar um campo, o PHP mostra aviso `Undefined array key` | `*_novo.php`, `*_alterar.php` | O JS sempre envia todos os campos; o exemplo do professor lê `$_POST['x']` do mesmo jeito |
+| 7 | Senha do login em texto puro; endpoints sem checagem de sessão no servidor | `cliente_*.php` | A apostila admite; o login é só um extra |
+| 8 | A lateral lista cada categoria uma vez, sem ordenar por quantidade | `preencherCategorias` | Ordenar exigiria `sort` com função, que não foi ensinado |
 
-**Fora do escopo da disciplina** (a apostila admite): senha em texto puro, endpoints sem checagem de sessão no servidor, texto inserido por `innerHTML` sem escape (risco de XSS). Só vale mexer se sobrar tempo **e** o grupo conseguir explicar.
+Já corrigido em relação à primeira versão: senha do banco (agora `root` com senha vazia, padrão do XAMPP), `confirm()` antes de excluir, lista vazia com mensagem, `alert("SUCESSO")` removido da tela de alterar, `<textarea>` no conteúdo longo, `lang="pt-BR"`, CSS e navegação entre os módulos.
 
 ---
 
@@ -731,6 +783,7 @@ Pontos que a revisão encontrou, em ordem de importância para a nota. Conhecê-
 | `Access denied for user` | Usuário/senha do banco errados em `conexao.php` | Ajuste a senha para a do seu MySQL |
 | `Unknown database 'projeto'` | O `.sql` não foi importado | Execute o `banco.sql` no phpMyAdmin |
 | `Undefined array key "titulo"` | Nome do campo no `fd.append` diferente do `$_POST` | Igualar os nomes |
+| Clicar em Enviar recarrega a página e nada é salvo | O botão está como `type="submit"` dentro do `<form>` | Usar `type="button"` |
 | Dado cadastrado não aparece | Gravou mas a lista não recarregou, ou erro no SELECT | Confira no phpMyAdmin se a linha existe |
 | Acentos viram `Ã©` | Charset errado | `set_charset("utf8mb4")` e `<meta charset="UTF-8">` |
 | "Nenhum dado foi alterado" ao salvar | Nenhum campo mudou | Normal: `affected_rows` foi 0 |
@@ -747,7 +800,7 @@ Sugestão para os ~minutos de cada integrante (adapte ao seu CRUD):
 1. **Contexto (30s):** "Meu CRUD é de ___; a tabela se chama ___ e tem os campos ___."
 2. **Banco:** abra o phpMyAdmin e mostre a tabela com os registros de exemplo.
 3. **Cadastrar:** crie um registro na tela → volte ao phpMyAdmin (F5) → "ele apareceu aqui". Explique o caminho: campo → `FormData` → `fetch` → `$_POST` → `prepare/bind_param/execute` → tabela.
-4. **Listar:** mostre a lista e explique `artigo_get.php` (sem id), o `while fetch_assoc` e o `preencherTabela`.
+4. **Listar:** mostre a lista e explique `artigo_get.php` (sem id), o `while fetch_assoc` e o `preencherLista`.
 5. **Alterar:** clique em Alterar (mostre o `?id=` na URL), explique as duas fases, salve e mostre a mudança no phpMyAdmin.
 6. **Excluir:** exclua e mostre que sumiu da lista **e** da tabela.
 7. **Segurança e arquitetura:** explique `prepare()`/`bind_param()` e por que o JS não acessa o banco; mostre o `conexao.php`.

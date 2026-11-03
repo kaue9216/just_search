@@ -34,7 +34,7 @@ Tabelas: `artigos(id,titulo,conteudo,autor)` = CRUD atual; `cliente(id,nome,emai
 2. `conexao.php` (apostila 8.3): `$servidor='localhost:3306'`, usuário `root`, senha `''` (padrão XAMPP), banco `projeto`; em falha de conexão responder JSON `nok` e `exit`; `set_charset('utf8mb4')`.
 3. Nomes: `php/<entidade>_get|novo|alterar|excluir.php`; `home/<entidade>_novo.html|_alterar.html`; `js/<entidade>_novo.js|_alterar.js`; a lista fica em `home/index.html` + `js/index.js` (ou uma página/JS de lista por entidade se houver vários CRUDs).
 4. `_get.php`: `isset($_GET['id'])` → busca um (`bind_param('i', ...)`), senão lista todos; mesmo arquivo para os dois casos.
-5. `_novo.php`: dados via `$_POST` (use `?? ''` e `empty()` para validar; retornar `nok` e `exit` antes do `prepare()`); conferir `affected_rows > 0`.
+5. `_novo.php`: dados via `$_POST` (valide campo vazio com `if($campo == '')`; retornar `nok` antes do `prepare()`, sem `??`, `trim` nem `exit`); conferir `affected_rows > 0`.
 6. `_alterar.php?id=X`: id via `$_GET`, dados via `$_POST`; `_excluir.php?id=X`: id via `$_GET` (GET na exclusão é o padrão da apostila — mantenha).
 7. `bind_param`: `i` inteiro, `s` string, `d` decimal; a string de tipos segue a ordem dos `?`.
 8. JS: alterar tem **duas fases** (carregar por id com `URLSearchParams` → preencher form; depois `POST` com `FormData` e `?id=`). Após sucesso: `alert('SUCESSO: ...')` e `window.location.href='../home/'`; erro: `alert('ERRO: ...')`.
@@ -52,7 +52,7 @@ Tabelas: `artigos(id,titulo,conteudo,autor)` = CRUD atual; `cliente(id,nome,emai
 ## Pendências conhecidas (por prioridade)
 1. Criar os CRUDs restantes (séries, livros, games, filmes).
 2. `conexao.php`: erro em `echo` (quebra JSON) e senha `"root"` (XAMPP padrão é vazia).
-3. Validação `?? ''`/`empty()` em `artigo_novo.php` e `artigo_alterar.php`.
+3. Validação de campo vazio (`== ''`) em `artigo_novo.php` e `artigo_alterar.php`.
 4. `confirm()` na exclusão (`js/index.js`).
 5. Sem CSS: aplicar Bootstrap + navegação; `conteudo` como `<textarea>`.
 6. Lista vazia: `artigo_get.php` devolve `nok` e a tela fica em branco → mostrar "Nenhum registro".

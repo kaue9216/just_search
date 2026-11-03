@@ -1,59 +1,60 @@
-// Para adicionar um campo novo: HTML (input com id e name) + PHP. O JS não muda.
-const form = document.getElementById("form");
-
 document.addEventListener("DOMContentLoaded", () => {
     const url = new URLSearchParams(window.location.search);
     const id = url.get("id");
     buscar(id);
 });
 
-// Busca o registro e preenche o formulário
-async function buscar(id) {
-    try {
-        const retorno = await fetch("../php/livro_get.php?id=" + id);
-        const resposta = await retorno.json();
-        if (resposta.status === "ok") {
-            const registro = resposta.data[0];
-            // cada coluna do banco vai para o campo com o mesmo name
-            for (const [coluna, valor] of Object.entries(registro)) {
-                if (form.elements[coluna]) {
-                    form.elements[coluna].value = valor ?? "";
-                }
-            }
-            document.getElementById("id").value = id;
-        } else {
-            alert("ERRO: " + resposta.mensagem);
-            window.location.href = "index_livros.html";
-        }
-    } catch (erro) {
-        alert("ERRO: não foi possível falar com o servidor.");
-        console.error(erro);
+async function buscar(id){
+    const retorno = await fetch("../php/livro_get.php?id=" + id);
+    const resposta = await retorno.json();
+    if(resposta.status == "ok"){
+        var registro = resposta.data[0];
+        document.getElementById("titulo").value = registro.titulo;
+        document.getElementById("autor").value = registro.autor;
+        document.getElementById("editora").value = registro.editora;
+        document.getElementById("genero").value = registro.genero;
+        document.getElementById("ano").value = registro.ano;
+        document.getElementById("numero_paginas").value = registro.numero_paginas;
+        document.getElementById("id").value = id;
+    }
+    else{
+        alert("ERRO: " + resposta.mensagem);
+        window.location.href = "index_livros.html";
     }
 }
 
-form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const btn = document.getElementById("enviar");
-    const id = document.getElementById("id").value;
-    const fd = new FormData(form);
-
-    btn.disabled = true;
-    try {
-        const retorno = await fetch("../php/livro_alterar.php?id=" + id, {
-            method: "POST",
-            body: fd
-        });
-        const resposta = await retorno.json();
-        if (resposta.status === "ok") {
-            alert("SUCESSO: " + resposta.mensagem);
-            window.location.href = "index_livros.html";
-        } else {
-            alert("ERRO: " + resposta.mensagem);
-        }
-    } catch (erro) {
-        alert("ERRO: não foi possível falar com o servidor.");
-        console.error(erro);
-    } finally {
-        btn.disabled = false;
-    }
+document.getElementById("enviar").addEventListener("click", () => {
+    alterar();
 });
+
+async function alterar(){
+    var titulo = document.getElementById("titulo").value;
+    var autor = document.getElementById("autor").value;
+    var editora = document.getElementById("editora").value;
+    var genero = document.getElementById("genero").value;
+    var ano = document.getElementById("ano").value;
+    var numero_paginas = document.getElementById("numero_paginas").value;
+    var id = document.getElementById("id").value;
+
+    const fd = new FormData();
+    fd.append("titulo", titulo);
+    fd.append("autor", autor);
+    fd.append("editora", editora);
+    fd.append("genero", genero);
+    fd.append("ano", ano);
+    fd.append("numero_paginas", numero_paginas);
+
+    const retorno = await fetch("../php/livro_alterar.php?id=" + id,
+        {
+          method: "POST",
+          body: fd
+        });
+    const resposta = await retorno.json();
+    if(resposta.status == "ok"){
+        alert("SUCESSO: " + resposta.mensagem);
+        window.location.href = "index_livros.html";
+    }
+    else{
+        alert("ERRO: " + resposta.mensagem);
+    }
+}

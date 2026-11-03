@@ -41,7 +41,7 @@ Aplicação web com CRUDs armazenados em **MySQL**, acessados por um back-end **
 | Games | `games` | _(preencher)_ | ✅ Completo |
 | Livros | `livros` | _(preencher)_ | ✅ Completo |
 | Filmes | `filmes` | _(preencher)_ | ✅ Completo |
-| Séries | `series` | _(preencher)_ | ✅ Completo (código do Dudeck, JS no modelo simples; falta testar no navegador) |
+| Séries | `series` | _(preencher)_ | ✅ Completo (falta testar no navegador) |
 
 A RA1 tinha 5 módulos, o que sugere um grupo de 5. **Confirmar o número de integrantes**, pois define o mínimo de CRUDs. Conferir também se essas tabelas batem com o modelo lógico da disciplina de Banco de Dados.
 
@@ -115,13 +115,15 @@ Resposta de todo PHP: `{ "status": "ok" | "nok", "mensagem": "...", "data": [ ..
 
 **Já em conformidade:** estrutura de pastas; padrão JSON; `prepare`/`bind_param` em todos os SQL; `fetch` + `FormData`; `$_GET` para id e `$_POST` para dados; `conexao.php` único; `utf8mb4`; script SQL com registros de exemplo; sem `localStorage`; senha de banco não aparece no front.
 
-**Corrigido nesta revisão:** `conexao.php` responde em JSON quando a conexão falha e usa `root`/senha vazia (padrão do XAMPP); validação com `?? ''` e `trim()` em todos os `*_novo.php` e `*_alterar.php` (campo vazio devolve `nok` antes do `prepare()`); `confirm()` antes de excluir; lista vazia mostra "Nenhum registro encontrado"; textos de HTML em `pt-BR`; CSS único; conteúdo em `<textarea>`; os CRUDs não dependem mais de login.
+**Corrigido nesta revisão:** `conexao.php` usa `root`/senha vazia (padrão do XAMPP) e `set_charset("utf8mb4")`; validação de campo vazio (`if($campo == '')`) em todos os `*_novo.php` e `*_alterar.php` (devolve `nok` antes do `prepare()`); `confirm()` antes de excluir; lista vazia mostra "Nenhum registro encontrado"; textos de HTML em `pt-BR`; CSS único; conteúdo em `<textarea>`; os CRUDs não dependem mais de login.
 
 **Pendente:**
 
 1. **Séries:** testar no navegador (listar, pesquisar, criar, alterar, excluir).
 2. **Integrantes:** preencher nomes e responsáveis por CRUD nas tabelas acima (exigido na entrega).
 3. **Teste final:** importar `banco.sql` em banco vazio e testar em outro navegador/janela anônima; mostrar o registro no phpMyAdmin após cada operação.
+
+**Código no nível do professor:** todo o JS e o PHP seguem o estilo do exemplo `.template-giulio/` (`var`, `function`, `for`, `if/else`; sem `try/catch`, `??`, `filter`, regex etc.). Por isso não há escape de HTML na listagem nem tratamento de erro de rede; as limitações estão na seção 11 do [GUIA-DE-ESTUDO.md](GUIA-DE-ESTUDO.md).
 
 **Melhorias fora do escopo da disciplina** (opcionais; a apostila admite senha em texto puro e SQL com `innerHTML`): endpoints sem checagem de sessão, `password_hash`, escape de HTML na listagem. Só vale mexer se sobrar tempo e se o grupo conseguir explicar.
 

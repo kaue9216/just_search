@@ -15,4 +15,3 @@ if(isset($_SESSION['usuario'])){
 }
 header("Content-type:application/json;charset=utf-8");
 echo json_encode($retorno);
-

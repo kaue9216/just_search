@@ -1,22 +1,21 @@
 <?php
-include_once('conexao.php');
-
+    include_once('conexao.php');
     $retorno = [
-        'status'   => '',
-        'mensagem' => '',
-        'data'     => []
+        'status'    => '',
+        'mensagem'  => '',
+        'data'      => []
     ];
 
     if(isset($_GET['id'])){
         $stmt = $conexao->prepare("SELECT * FROM livros WHERE id = ?");
-        $stmt->bind_param("i", $_GET['id']);
-    }else{
+        $stmt->bind_param("i",$_GET['id']);
+    }
+    else{
         $stmt = $conexao->prepare("SELECT * FROM livros");
     }
 
     $stmt->execute();
     $resultado = $stmt->get_result();
-
     $tabela = [];
     if($resultado->num_rows > 0){
         while($linha = $resultado->fetch_assoc()){
@@ -24,21 +23,20 @@ include_once('conexao.php');
         }
 
         $retorno = [
-            'status'   => 'ok',
-            'mensagem' => 'Sucesso, consulta efetuada.',
-            'data'     => $tabela
-        ];
-    }else{
-        $retorno = [
-            'status'   => 'nok',
-            'mensagem' => 'Nenhum registro encontrado.',
-            'data'     => []
+            'status'    => 'ok',
+            'mensagem'  => 'Sucesso, consulta efetuada.',
+            'data'      => $tabela
         ];
     }
-
+    else{
+        $retorno = [
+            'status'    => 'nok',
+            'mensagem'  => 'Não há registros',
+            'data'      => []
+        ];
+    }
     $stmt->close();
     $conexao->close();
 
     header("Content-type:application/json;charset=utf-8");
     echo json_encode($retorno);
-?>

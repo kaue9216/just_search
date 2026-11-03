@@ -1,29 +1,34 @@
-// O formulário (<form id="form">) tem um name em cada campo.
-// Para adicionar um campo novo: HTML (input com id e name) + PHP. O JS não muda.
-const form = document.getElementById("form");
-
-form.addEventListener("submit", async (e) => {
-    e.preventDefault(); // não deixa o navegador recarregar a página
-    const btn = document.getElementById("enviar");
-    const fd = new FormData(form); // pega todos os campos que têm name
-
-    btn.disabled = true;
-    try {
-        const retorno = await fetch("../php/livro_novo.php", {
-            method: "POST",
-            body: fd
-        });
-        const resposta = await retorno.json();
-        if (resposta.status === "ok") {
-            alert("SUCESSO: " + resposta.mensagem);
-            window.location.href = "index_livros.html";
-        } else {
-            alert("ERRO: " + resposta.mensagem);
-        }
-    } catch (erro) {
-        alert("ERRO: não foi possível falar com o servidor.");
-        console.error(erro);
-    } finally {
-        btn.disabled = false;
-    }
+document.getElementById("enviar").addEventListener("click", () => {
+    novo();
 });
+
+async function novo(){
+    var titulo = document.getElementById("titulo").value;
+    var autor = document.getElementById("autor").value;
+    var editora = document.getElementById("editora").value;
+    var genero = document.getElementById("genero").value;
+    var ano = document.getElementById("ano").value;
+    var numero_paginas = document.getElementById("numero_paginas").value;
+
+    const fd = new FormData();
+    fd.append("titulo", titulo);
+    fd.append("autor", autor);
+    fd.append("editora", editora);
+    fd.append("genero", genero);
+    fd.append("ano", ano);
+    fd.append("numero_paginas", numero_paginas);
+
+    const retorno = await fetch("../php/livro_novo.php",
+        {
+          method: "POST",
+          body: fd
+        });
+    const resposta = await retorno.json();
+    if(resposta.status == "ok"){
+        alert("SUCESSO: " + resposta.mensagem);
+        window.location.href = "index_livros.html";
+    }
+    else{
+        alert("ERRO: " + resposta.mensagem);
+    }
+}

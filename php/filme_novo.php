@@ -1,48 +1,50 @@
 <?php
-include_once('conexao.php');
-
-$retorno = [
-    'status'   => '',
-    'mensagem' => '',
-    'data'     => []
-];
-
-$titulo  = trim($_POST['titulo'] ?? '');
-$sinopse = trim($_POST['sinopse'] ?? '');
-$diretor = trim($_POST['diretor'] ?? '');
-$genero  = trim($_POST['genero'] ?? '');
-$ano     = ($_POST['ano'] ?? '') != '' ? (int)$_POST['ano'] : null;
-
-// Não permite cadastrar com campos vazios (o ano é opcional)
-if($titulo == '' || $sinopse == '' || $diretor == '' || $genero == ''){
+    include_once('conexao.php');
     $retorno = [
-        'status'   => 'nok',
-        'mensagem' => 'Preencha título, sinopse, diretor e gênero.',
-        'data'     => []
+        'status'    => '',
+        'mensagem'  => '',
+        'data'      => []
     ];
-}else{
-    $stmt = $conexao->prepare("INSERT INTO filmes (titulo, sinopse, diretor, genero, ano) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssi", $titulo, $sinopse, $diretor, $genero, $ano);
-    $stmt->execute();
 
-    if($stmt->affected_rows > 0){
+    $titulo = $_POST['titulo'];
+    $sinopse = $_POST['sinopse'];
+    $diretor = $_POST['diretor'];
+    $genero = $_POST['genero'];
+    $ano = null;
+    if($_POST['ano'] != ''){
+        $ano = (int) $_POST['ano'];
+    }
+
+    if($titulo == '' || $sinopse == '' || $diretor == '' || $genero == ''){
         $retorno = [
-            'status'   => 'ok',
-            'mensagem' => 'registro inserido com sucesso',
-            'data'     => []
-        ];
-    }else{
-        $retorno = [
-            'status'   => 'nok',
-            'mensagem' => 'falha ao inserir o registro',
-            'data'     => []
+            'status'    => 'nok',
+            'mensagem'  => 'Preencha todos os campos.',
+            'data'      => []
         ];
     }
-    $stmt->close();
-}
+    else{
+        $stmt = $conexao->prepare("INSERT INTO filmes(titulo, sinopse, diretor, genero, ano) VALUES(?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssi", $titulo, $sinopse, $diretor, $genero, $ano);
+        $stmt->execute();
 
-$conexao->close();
+        if($stmt->affected_rows > 0){
+            $retorno = [
+                'status'    => 'ok',
+                'mensagem'  => 'registro inserido com sucesso',
+                'data'      => []
+            ];
+        }
+        else{
+            $retorno = [
+                'status'    => 'nok',
+                'mensagem'  => 'falha ao inserir o registro',
+                'data'      => []
+            ];
+        }
+        $stmt->close();
+    }
 
-header("Content-type:application/json;charset=utf-8");
-echo json_encode($retorno);
-?>
+    $conexao->close();
+
+    header("Content-type:application/json;charset=utf-8");
+    echo json_encode($retorno);

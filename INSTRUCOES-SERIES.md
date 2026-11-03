@@ -11,6 +11,7 @@ Você vai implementar **somente o CRUD de Séries** do projeto JustSearch (ativi
 - Todo SQL com dado do usuário usa `prepare()` + `bind_param()` + `execute()`. Nunca concatene valores na query.
 - Todo PHP responde **sempre JSON** no formato `{status, mensagem, data}` (`status` é `"ok"` ou `"nok"`), com `header("Content-type:application/json;charset=utf-8");`.
 - **Login não é exigido.** Não use `valida_sessao`, não redirecione para o login e não crie botão de logoff nas telas de séries.
+- **Escreva no nível do exemplo do professor** (`.template-giulio/`): `var`, `function`/`async function`, `for` com índice, `if/else`, `fetch`, `FormData`. **Proibido** `try/catch`, `??`, `trim()`, `exit`, arrow function em callback (`filter`, `some`, `forEach`), `closest`, `dataset`, `Object.entries`, regex e `sort` com função. Se não foi ensinado em aula, não use.
 - Não adicione nada que não seja necessário (sem validações sofisticadas, sem classes, sem arquivos extras).
 
 ## 2. O que já existe (não recrie)
@@ -45,8 +46,8 @@ Você vai implementar **somente o CRUD de Séries** do projeto JustSearch (ativi
 Copie os `php/livro_*.php` para `php/serie_*.php` e adapte: tabela `series`, campos `titulo, autor, categoria, ano`.
 
 - **`serie_get.php`**: `SELECT * FROM series` (ou `WHERE id = ?` com `bind_param("i", $_GET['id'])`). Se houver linhas, `status "ok"` e `data` com as linhas. Se não houver, `status "nok"` e `mensagem "Não há registros"`.
-- **`serie_novo.php`**: leia com `$x = ($_POST['x'] ?? '');`. **Valide antes do `prepare()`**: se `trim($titulo) == '' || trim($autor) == '' || trim($categoria) == '' || trim($ano) == ''`, responda `nok` com `"Preencha todos os campos."` e dê `exit`. Depois `INSERT INTO series (titulo, autor, categoria, ano) VALUES (?, ?, ?, ?)` com `bind_param("sssi", ...)`. Confira `$stmt->affected_rows > 0`.
-  - **Valide também o número:** depois da checagem de vazio, se `!is_numeric($ano)`, responda `nok` com `"O ano deve ser um número."` e dê `exit` (sem isso, texto como "abc" seria gravado como 0). Faça o mesmo em `serie_alterar.php`. Veja `php/livro_novo.php` como exemplo.
+- **`serie_novo.php`**: leia com `$x = $_POST['x'];`. **Valide antes do `prepare()`**: `if($titulo == '' || $autor == '' || $categoria == '' || $ano == '')` responde `nok` com `"Preencha todos os campos."`; o `INSERT` fica no `else`. O `INSERT INTO series (titulo, autor, categoria, ano) VALUES (?, ?, ?, ?)` com `bind_param("sssi", ...)`. Confira `$stmt->affected_rows > 0`.
+  - **Valide também o número:** logo depois, um `else if(!is_numeric($ano))` responde `nok` com `"O ano deve ser um número."` (sem isso, texto como "abc" seria gravado como 0). Faça o mesmo em `serie_alterar.php`. Veja `php/serie_novo.php` pronto como exemplo.
 - **`serie_alterar.php`**: só age se existir `$_GET['id']`. Mesma validação de campos vazios. `UPDATE series SET titulo = ?, autor = ?, categoria = ?, ano = ? WHERE id = ?` com `bind_param("sssii", $titulo, $autor, $categoria, $ano, $_GET['id'])`. `affected_rows > 0` é sucesso; `== 0` também é `ok`, com a mensagem "Nenhum dado foi alterado."; outro valor é `nok`.
 - **`serie_excluir.php`**: só age se existir `$_GET['id']`. `DELETE FROM series WHERE id = ?` com `bind_param("i", ...)`. `affected_rows > 0` é `ok`.
 - Todo PHP termina com `$stmt->close(); $conexao->close();` e depois o `header` + `echo json_encode($retorno);`.
@@ -54,7 +55,7 @@ Copie os `php/livro_*.php` para `php/serie_*.php` e adapte: tabela `series`, cam
 
 ### 3.2 JS: como fazer
 
-- **`js/index_series.js`**: copie `js/index_livros.js` e adapte só o que muda:
+- **`js/index_series.js`**: já está pronto e segue o modelo simples. Se for refazer, copie `js/index_livros.js` e adapte só o que muda:
   - `../php/livro_get.php` vira `../php/serie_get.php` e `livro_excluir.php` vira `serie_excluir.php`;
   - `livro_novo.html` vira `serie_novo.html` e `livro_alterar.html` vira `serie_alterar.html` (as telas ficam na mesma pasta, sem `../`);
   - textos "livro" viram "série" (mensagens de vazio e do `confirm`);
@@ -63,12 +64,14 @@ Copie os `php/livro_*.php` para `php/serie_*.php` e adapte: tabela `series`, cam
   - o bloco do card (dentro do `for` de `preencherLista`) fica assim:
 
     ```js
-    var extra = r.ano ? ` (${escapar(r.ano)})` : "";
-    var meta = escapar(r.autor) + " · " + escapar(r.categoria);
-    var descricao = "";
+    var titulo = tabela[i].titulo;
+    if(tabela[i].ano){
+        titulo += " (" + tabela[i].ano + ")";
+    }
+    // meta: tabela[i].autor + " · " + tabela[i].categoria
     ```
-  - **mantenha** a função `escapar`, o `confirm()` antes de excluir, o `try/catch` do `buscar` e o `window.location.reload()` depois de excluir.
-- **`js/serie_novo.js`**: copie `js/livro_novo.js`. Campos: `titulo, autor, categoria, ano`. Envie com `FormData` por `POST` para `../php/serie_novo.php`. Se `status == "ok"`, faça `alert("SUCESSO: " + resposta.mensagem)` e vá para `index_series.html`. Senão, `alert("ERRO: " + resposta.mensagem)`.
+  - **não use** `escapar`, `try/catch`, `filter`, `closest` nem `dataset`: a pesquisa é um `for` com `indexOf`, e o Excluir é `onclick="excluir(id)"`. **Mantenha** o `confirm()` antes de excluir e o `window.location.reload()` depois.
+- **`js/serie_novo.js`**: copie `js/livro_novo.js`. Campos: `titulo, autor, categoria, ano`, um `var` por campo e um `fd.append` por campo. Clique no botão `enviar` (que é `type="button"`). Envie com `FormData` por `POST` para `../php/serie_novo.php`. Se `status == "ok"`, faça `alert("SUCESSO: " + resposta.mensagem)` e vá para `index_series.html`. Senão, `alert("ERRO: " + resposta.mensagem)`.
 - **`js/serie_alterar.js`**: copie `js/livro_alterar.js`. Funciona em **duas fases**:
   1. no `DOMContentLoaded`, leia o `id` com `new URLSearchParams(window.location.search)`, faça `fetch("../php/serie_get.php?id=" + id)` e preencha os campos (e o `hidden id`). Não mostre `alert` de sucesso ao só carregar;
   2. no clique de `enviar`, monte o `FormData` e faça `POST` para `../php/serie_alterar.php?id=` + id. O resto segue o padrão de sucesso/erro.
