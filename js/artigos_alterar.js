@@ -15,7 +15,7 @@ async function buscar(id){
         document.getElementById("id").value = id;
     }else{
         alert("ERRO: " + resposta.mensagem);
-        window.location.href = "index.html";
+        window.location.href = "index_artigo.html";
     }
 }
 
@@ -42,7 +42,7 @@ async function alterar(){
     const resposta = await retorno.json();
     if(resposta.status == "ok"){
         alert("SUCESSO: " + resposta.mensagem);
-        window.location.href = "index.html";
+        window.location.href = "index_artigo.html";
     }else{
         alert("ERRO: " + resposta.mensagem);
     }
